@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no, width=device-width">
+    <access origin="*" subdomains="true" />
+    <title></title>
+
+    <link href="lib/ionic/css/ionic.css" rel="stylesheet">
+    <link href="css/style.css" rel="stylesheet">
+
+    <!-- IF using Sass (run gulp sass first), then uncomment below and remove the CSS includes above
+    <link href="css/ionic.app.css" rel="stylesheet">
+    -->
+
+    <!-- ionic/angularjs js -->
+    <script src="lib/ionic/js/ionic.bundle.js"></script>
+
+    <!-- cordova script (this will be a 404 during development) -->
+    <script src="lib/ngCordova/dist/ng-cordova.js"></script>
+    <script src="cordova.js"></script>
+
+    <!-- your app's js -->
+    <script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=rE3Ev0Ou1MFI8txZgGj0sASE"></script>
+    <script type="text/javascript" src="http://developer.baidu.com/map/jsdemo/demo/convertor.js"></script>
+    <script src="js/OSS.js"></script>
+    <script src="js/app.js"></script>
+    <script src="js/controllers.js"></script>
+    <script src="js/services.js"></script>
+    <script src="js/directive.js"></script>
+    <!--<script src="http://192.168.253.1:8100/target/target-script-min.js#anonymous"></script>-->
+</head>
+<body ng-app="starter">
+
+<ion-nav-bar class="bar-positive">
+</ion-nav-bar>
+<ion-nav-view></ion-nav-view>
+
+
+<!--
+  menu template
+-->
+<script type="text/ng-template" id="menu">
+    <ion-side-menus>
+        <ion-side-menu-content drag-content="false">
+            <ion-nav-view name="menuContent"></ion-nav-view>
+        </ion-side-menu-content>
+
+        <ion-side-menu side="left">
+            <ion-content class="menu-side-bg">
+                <div class="text-center light">
+                    <div class="my-avatar-wrap">
+                        <img class="my-avatar" src="img/11.jpg" class="rounded" height="100%" width="100%" alt=""/>
+                    </div>
+                    <p>小松鼠QB</p>
+
+                    <p>粉丝0/关注0</p>
+                </div>
+                <ion-list class="menu-side-list list-borderless">
+                    <ion-item class="item-icon-left" menu-close>
+                        <a href="#/menu/my-share">
+                            <i class="icon ion-android-walk"></i>
+                            我的足迹
+                        </a>
+
+                    </ion-item>
+                    <ion-item class="item-icon-left" nav-clear menu-close>
+                        <i class="icon ion-arrow-graph-up-right"></i>
+                        我的推荐
+                    </ion-item>
+                    <ion-item class="item-icon-left" nav-clear menu-close>
+                        <i class="icon ion-arrow-graph-down-right"></i>
+                        我的吐槽
+                    </ion-item>
+                    <ion-item class="item-icon-left" nav-clear menu-close>
+                        <i class="icon ion-social-usd"></i>
+                        小金库
+                    </ion-item>
+                    <ion-item class="item-icon-left" nav-clear menu-close>
+                        <i class="icon ion-star"></i>
+                        我的收藏
+                    </ion-item>
+                    <ion-item class="item-icon-left" nav-clear menu-close>
+                        <i class="icon ion-ios-heart"></i>
+                        我的关注
+                    </ion-item>
+                    <ion-item class="item-icon-left" nav-clear menu-close>
+                        <i class="icon ion-ios-gear"></i>
+                        设置
+                    </ion-item>
+                </ion-list>
+            </ion-content>
+        </ion-side-menu>
+    </ion-side-menus>
+</script>
+
+<!--
+  tabs template
+-->
+<script type="text/ng-template" id="tabs">
+    <ion-nav-bar class="bar-positive">
+        <ion-nav-back-button class="button-clear">
+            <i class="icon ion-ios-arrow-back"></i>返回
+        </ion-nav-back-button>
+    </ion-nav-bar>
+    <ion-tabs class="tabs-icon-only tabs-color-assertive">
+        <ion-tab title="主页" icon-off="ion-ios-home-outline" icon-on="ion-ios-home" href="#/menu/tab/home">
+            <ion-nav-view name="tab-home"></ion-nav-view>
+        </ion-tab>
+
+        <ion-tab title="" icon-off="ion-ios-plus-outline" icon-on="ion-ios-plus" href="#/menu/tab/add-pos">
+            <ion-nav-view name="tab-add"></ion-nav-view>
+        </ion-tab>
+
+        <ion-tab title="导航" icon-off="ion-ios-location-outline" icon-on="ion-ios-location" href="#/menu/tab/nav">
+            <ion-nav-view name="tab-nav"></ion-nav-view>
+        </ion-tab>
+    </ion-tabs>
+</script>
+<!--
+  modal1 template
+-->
+<script id="modal1.html" type="text/ng-template">
+    <div class="modal" id="navReply">
+        <ion-header-bar class="bar-positive">
+            <button class="button-clear button icon ion-ios-arrow-back" ng-click="closeSetting()"></button>
+            <h1 class="title">点评</h1>
+        </ion-header-bar>
+
+        <ion-content scroll="true">
+            <ul class="list list-borderless">
+                <ion-toggle ng-model="reply.reply_support" toggle-class="toggle-calm">
+                    楼主分享的地点怎么样?
+                    <i class="icon"
+                       ng-class="{'ion-android-happy balanced':reply.reply_support,'ion-android-sad assertive':!reply.reply_support}"></i>
+                </ion-toggle>
+                <li class="item">
+                    评分地点
+              <span>
+                <star ng-click="toggleStar()" class="icon energized padding-left"
+                      ng-class="{'ion-ios-star':star.handle,'ion-ios-star-outline':!star.handle}"
+                      ng-repeat="star in startList"></star>
+              </span>
+                    <span class="badge badge-assertive">{{reply.reply_score}}</span>
+                </li>
+
+                <li class="item item-body">
+                    <textarea required class="padding" ng-model="reply.reply_text" placeholder="发表评论..."
+                              style=";border-radius:10px;height:150px;width:100%;box-shadow: 2px 2px 5px rgba(0,0,0,0.5);">
+                    </textarea>
+                </li>
+            </ul>
+
+            <div class="list card">
+                <ion-item class="item-divider item-avatar-left item-icon-right">
+                    <img src="img/figure.png" alt="" style="top:1px"/>照片
+                    <i ng-click="addImage()" class="icon ion-plus-round positive"></i>
+                </ion-item>
+            </div>
+
+            <ul class="row row-wrap">
+                <li class="col col-33" ng-repeat="img in tpl_list">
+                    <div class="pic-wrap" delete-item>
+                        <div class="pic-progress-wrap">
+                            <div class="pic-progress"></div>
+                        </div>
+                        <span ng-show="img.close" class="pic-delete-btn"></span>
+
+                        <div ng-class="{ani_shake:img.close}" class="pic-content"
+                             ng-style="{'background-image':'url('+img.url+')'}"></div>
+                    </div>
+                </li>
+            </ul>
+
+        </ion-content>
+
+        <ion-footer-bar class="bar-positive">
+            <div class="buttons">
+                <button class="button" ng-click="submitShare()">发布</button>
+            </div>
+            <div class="buttons pull-right">
+                <button class="button" ng-click="cancelSetting()">取消</button>
+            </div>
+        </ion-footer-bar>
+
+    </div>
+</script>
+
+<!--
+modal2 template
+-->
+<script id="modal2.html" type="text/ng-template">
+    <div class="modal">
+        <ion-header-bar class="bar-positive">
+            <button class="button-clear button icon ion-ios-arrow-back" ng-click="closeSetting2()"></button>
+            <h1 class="title">分享列表</h1>
+        </ion-header-bar>
+
+        <ion-content>
+            <ion-list class="list-borderless item-text-wrap" ng-repeat="share in shareList" ng-click="clickShare(share.share_id)">
+                    <ion-item>
+                        <h2 class="padding-vertical">
+                            <i class="icon ion-ios-location item-placeholder"></i>
+                            {{share.share_place}}
+                        </h2>
+
+                        <p>
+                            {{share.share_text}}
+                        </p>
+                        <span class="item-note">{{share.share_date|convertDate}}</span>
+                    </ion-item>
+
+                    <ion-item class="row">
+                        <div class="col col-33" ng-repeat="img in share.share_imgs|convertImgStr">
+                            <img ng-src="{{img}}" width="100%" alt=""/>
+                        </div>
+                    </ion-item>
+
+                    <ion-item class="row row-no-padding">
+                        <div class="col col-25">
+                            <a class="button button-clear button-block">
+                                <i class="icon ion-ios-chatboxes-outline"></i>
+                                回复
+                            </a>
+                        </div>
+                        <div class="col col-25">
+                            <a class="button button-clear button-block">
+                                <i class="icon ion-share"></i>
+                                分享
+                            </a>
+                        </div>
+                        <div class="col col-50">
+                            <a class="button button-clear button-block" style="color:orangered">
+                                推荐：<span style="font-size:54px;font-style:italic">{{share.share_score}}</span>
+                            </a>
+
+                        </div>
+                    </ion-item>
+
+                    <div class="item">
+                        <hr style="opacity: 0.2"/>
+                    </div>
+            </ion-list>
+            <ion-infinite-scroll
+                    on-infinite="loadMore()"
+                    distance="1%"
+                    immediate-check="false"
+                    ng-if="moreDataCanBeLoaded()"
+                    >
+            </ion-infinite-scroll>
+        </ion-content>
+    </div>
+</script>
+
+
+</body>
+</html>
