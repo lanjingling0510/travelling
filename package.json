@@ -1,0 +1,45 @@
+{
+  "name": "travelling",
+  "version": "1.0.0",
+  "description": "travelling: An Ionic project",
+  "scripts": {
+    "start": "nodemon --harmony -e js,html,css,json index.js",
+    "watch": "./node_modules/.bin/webpack -d --progress --colors --watch",
+    "build": "./node_modules/.bin/webpack -p --progress",
+    "serve": "webpack-dev-server --progress --inline --colors --hot --content-base www"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "autoprefixer-loader": "^2.0.0",
+    "babel-core": "^5.7.4",
+    "babel-eslint": "^4.0.5",
+    "babel-loader": "^5.3.2",
+    "css-loader": "^0.17.0",
+    "eslint": "^1.0.0-rc-1",
+    "eslint-config-airbnb": "0.0.7",
+    "eslint-plugin-react": "^3.2.2",
+    "file-loader": "^0.8.4",
+    "html-loader": "^0.3.0",
+    "html-minify-loader": "^1.0.0",
+    "json-loader": "^0.5.2",
+    "less": "^2.5.1",
+    "less-loader": "^2.2.0",
+    "less-plugin-autoprefix": "^1.4.2",
+    "ng-annotate-loader": "0.0.10",
+    "node-libs-browser": "^0.5.2",
+    "raw-loader": "^0.5.1",
+    "style-loader": "^0.12.3",
+    "uglify-loader": "^1.2.0",
+    "url-loader": "^0.5.6",
+    "webpack": "^1.12.2",
+    "webpack-dev-server": "^1.11.0"
+  },
+  "cordovaPlugins": [
+    "cordova-plugin-device",
+    "cordova-plugin-console",
+    "cordova-plugin-whitelist",
+    "cordova-plugin-splashscreen",
+    "com.ionic.keyboard"
+  ],
+  "cordovaPlatforms": []
+}
