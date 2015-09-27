@@ -21,4 +21,9 @@ function moduleConfig($stateProvider) {
 function HomeController() {
     console.log('home');
     const vm = this;
+    vm.click = click;
+
+    function click() {
+        console.log('123456');
+    }
 }
