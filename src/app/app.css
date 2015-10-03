@@ -1,0 +1,10 @@
+
+@import './lib/ionic/css/ionic.css';
+
+.map{
+    height:100%;
+}
+.map .anchorBL{
+    display:none;
+}
+

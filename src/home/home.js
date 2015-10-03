@@ -1,5 +1,4 @@
 module.exports = angular.module('travelling.home', [
-    'ionic',
 ])
     .config(moduleConfig)
     .controller('HomeController', HomeController);
@@ -19,11 +18,7 @@ function moduleConfig($stateProvider) {
 
 /* @ngInject */
 function HomeController() {
-    console.log('home');
     const vm = this;
-    vm.click = click;
 
-    function click() {
-        console.log('123456');
-    }
 }
+

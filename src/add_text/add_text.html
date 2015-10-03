@@ -1,0 +1,14 @@
+
+<ion-view view-title="描述地点">
+    <ion-nav-buttons side="right">
+        <button  class="button" ng-click="vm.nextPage()">下一步</button>
+    </ion-nav-buttons>
+
+
+    <ion-content  scroll="false">
+        <div style="height:100%" class="padding">
+            <textarea required style="height:100%;width:100%"  placeholder="写点什么吧...(不少于12个字，不含特殊符号)"  ng-model="vm.text" ></textarea>
+        </div>
+    </ion-content>
+
+</ion-view>

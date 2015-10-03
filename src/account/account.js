@@ -1,5 +1,4 @@
 module.exports = angular.module('travelling.account', [
-    'ionic',
 ])
     .config(moduleConfig)
     .controller('AccountController', AccountController);

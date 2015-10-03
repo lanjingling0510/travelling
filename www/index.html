@@ -15,7 +15,7 @@
 <!--
   The nav bar that will be updated as we navigate between views.
 -->
-<ion-nav-bar class="bar-stable">
+<ion-nav-bar class="bar-positive">
     <ion-nav-back-button>
     </ion-nav-back-button>
 </ion-nav-bar>
@@ -24,10 +24,16 @@
   Templates are in the /templates folder (but you could also
   have templates inline in this html file if you'd like).
 -->
-<ion-nav-view></ion-nav-view>
+<ion-nav-view name="main"></ion-nav-view>
 <!-- inject:js -->
-<script src="http://192.168.1.106:8001/target/target-script-min.js#anonymous"></script>
+<!--<script src="http://192.168.1.106:8001/target/target-script-min.js#anonymous"></script>-->
+<script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=rE3Ev0Ou1MFI8txZgGj0sASE"></script>
+<script type="text/javascript" src="http://developer.baidu.com/map/jsdemo/demo/convertor.js"></script>
 <script src="/ionic.bundle.min.js"></script>
+
+<script src="/ng-cordova.js"></script>
+<script src="cordova.js"></script>
+
 <script src="/vendor.bundle.js"></script>
 <script src="/bundle.js"></script>
 </body>

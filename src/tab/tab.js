@@ -1,6 +1,5 @@
 
 module.exports = angular.module('travelling.tab', [
-    'ionic',
 ])
     .config(moduleConfig);
 
@@ -10,6 +9,10 @@ function moduleConfig($stateProvider) {
     $stateProvider.state('tab', {
         url: '/tab',
         abstract: true,
-        template: require('./tab.html'),
+        views: {
+            'main': {
+                template: require('./tab.html'),
+            },
+        },
     });
 }
