@@ -92,13 +92,14 @@ function AddImageByApp($ionicActionSheet, $cordovaCamera, $cordovaImagePicker, $
 
 
 function UploadFile($rootScope, Upload) {
-    return function ({ files, url = '/apis/upload', method = 'POST', fileFieldName = 'upload'}) {
+    return function ({ files, url = '/apis/upload', method = 'POST'}) {
         const upload = Upload.upload({
             url: url,
-            file: files,
+            data: {
+                files: files,
+            },
             method: method,
             headers: {'Authorization': 'Bearer ' + $rootScope.auth.accessToken},
-            fileFormDataName: fileFieldName,
             sendFieldsAs: 'json',
         });
         return upload;

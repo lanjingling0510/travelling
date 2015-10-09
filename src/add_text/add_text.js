@@ -17,26 +17,29 @@ function ModuleConfig($stateProvider) {
 }
 
 /* @ngInject */
-function AddTextController($scope, store, $state, $ionicPopup) {
+function AddTextController($scope, store, $state, AlertService, $ionicHistory) {
     const vm = this;
-
-    $scope.$on('$ionicView.enter', function () {
-        vm.text = store.get('share.text') || '';
-    });
-
-    store.remove('share.text');
     vm.nextPage = nextPage;
 
+    $scope.$on('$ionicView.enter', function () {
+        vm.text = store.get('share.text');
+    });
+
+    initController();
+
     function nextPage() {
-        if (/^[\u4E00-\u9FA5A-Za-z0-9_]{12,}$/.test(vm.text)) {
+        if (/^.{12,}$/.test(vm.text)) {
             store.set('share.text', vm.text);
             $state.go('tab.add-pos');
         } else {
-            $ionicPopup.alert({
-                title: '<h2><i class="icon ion-alert-circled assertive"></i> 提示</h2>',
-                template: '不少于12个字，不含特殊符号',
-                okText: '确定',
-            });
+            AlertService.warning('不少于12个字，不含特殊符号');
+        }
+    }
+
+    function initController() {
+        //  如果刷新页面，则没有历史记录，跳转到add-label页面
+        if (!$ionicHistory.viewHistory().backView) {
+            $state.go('tab.add-label');
         }
     }
 }

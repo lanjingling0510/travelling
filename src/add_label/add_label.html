@@ -5,14 +5,14 @@
 
     <ion-content scroll="false">
         <div class="add-label-search">
-            <span class="badge" ng-repeat="label in vm.labelsArray">{{label}}</span>
+            <span class="badge" ng-repeat="label in vm.labelsList | filter:{selected: true}">{{label.name}}</span>
         </div>
 
 
         <ul class="row row-wrap">
-            <label-wrap class="col-25 add-label-wrap" ng-repeat="label in vm.labelsList">
-                <label-add class="add-label-col" name="{{label.name}}" bg="{{label.image}}"></label-add>
-                <label-remove ng-show="label.on" class="add-label-col add-label-close" name="{{label.name}}" ></label-remove>
+            <label-wrap class="col-25 add-label-wrap" ng-repeat="label in vm.labelsList track by label._id">
+                <label-add class="add-label-col"  bg="{{label.image}}"></label-add>
+                <label-remove ng-show="label.selected" class="add-label-col add-label-close" ></label-remove>
                 <span class="add-label-name">{{label.name}}</span>
             </label-wrap>
         </ul>

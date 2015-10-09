@@ -9,17 +9,17 @@ function AlertService($ionicPopup) {
     };
 
     function warning(msg) {
-        $ionicPopup.alert({
+        return $ionicPopup.alert({
             title: '<h2><i class="icon ion-alert-circled assertive"></i> 提示</h2>',
-            template: msg,
+            template: '<div class="text-center">' + msg + '</div>',
             okText: '确定',
         });
     }
 
     function success(msg) {
-        $ionicPopup.alert({
-            title: '<h2><i class="icon ion-checkmark-round success"></i> 提示</h2>',
-            template: msg,
+        return $ionicPopup.alert({
+            title: '<h2><i class="icon ion-checkmark-round balanced"></i> 提示</h2>',
+            template: '<div class="text-center">' + msg + '</div>',
             okText: '确定',
         });
     }

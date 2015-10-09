@@ -17,14 +17,17 @@ function ModuleConfig($stateProvider) {
 }
 
 /* @ngInject */
-function AddPosController($scope, $ionicLoading, store, $cordovaGeolocation, BMapGeocoder, $q, $ionicPopup, $state) {
+function AddPosController($scope, $ionicLoading, store, $cordovaGeolocation, BMapGeocoder, $q, AlertService, $state, $ionicHistory) {
     const vm = this;
-    let map, marker, infoWindow;// eslint-disable-line one-var
+    let map;
+    let marker;
+    let infoWindow;
     vm.searchText = '北京天安门';
     vm.currentPos = currentPos;
     vm.searchPos = searchPos;
     vm.nextPage = nextPage;
 
+    initController();
     initMap();
 
     $scope.$on('$ionicView.enter', function () {
@@ -34,7 +37,8 @@ function AddPosController($scope, $ionicLoading, store, $cordovaGeolocation, BMa
     });
 
     marker.addEventListener('click', markerClick);
-    map.addEventListener('touchend', mapClick);
+    map.addEventListener('click', mapClick);
+
 
     //  ===========================
     //  地图部分
@@ -61,9 +65,9 @@ function AddPosController($scope, $ionicLoading, store, $cordovaGeolocation, BMa
 
     //  获得当前位置信息
     function currentPos() {
-        $ionicLoading.show({
-            template: '加载地图...',
-        });
+        //$ionicLoading.show({
+        //    template: '加载地图...',
+        //});
 
         $cordovaGeolocation.getCurrentPosition({enableHighAccuracy: false})
             .then(changePosByPoint)
@@ -79,11 +83,7 @@ function AddPosController($scope, $ionicLoading, store, $cordovaGeolocation, BMa
             BMapGeocoder.getLocationPos(text)
                 .then(changePosByPoint)
                 .catch(msg => {
-                    $ionicPopup.alert({
-                        title: '<h2><i class="icon ion-alert-circled assertive"></i> 提示</h2>',
-                        template: msg.data,
-                        okText: '确定',
-                    });
+                    AlertService.warning(msg.data);
                 });
         }
     }
@@ -135,11 +135,14 @@ function AddPosController($scope, $ionicLoading, store, $cordovaGeolocation, BMa
             store.set('share.coordinates', vm.coordinates);
             $state.go('tab.add-img');
         } else {
-            $ionicPopup.alert({
-                title: '<h2><i class="icon ion-alert-circled assertive"></i> 提示</h2>',
-                template: '请输入地点名称~',
-                okText: '确定',
-            });
+            AlertService.warning('请输入地点名称~');
+        }
+    }
+
+
+    function initController() {
+        if (!$ionicHistory.viewHistory().backView) {
+            $state.go('tab.add-label');
         }
     }
 }

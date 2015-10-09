@@ -6,10 +6,16 @@
     "start": "nodemon --harmony -e js,html,css,json index.js",
     "watch": "./node_modules/.bin/webpack -d --progress --colors --watch",
     "build": "./node_modules/.bin/webpack -p --progress",
-    "serve": "webpack-dev-server --inline --colors --hot --content-base www --host 192.168.1.111"
+    "serve": "webpack-dev-server --inline --colors --hot --content-base www --host 192.168.88.115"
   },
   "dependencies": {
+    "angular": "^1.4.3",
+    "angular-animate": "^1.4.7",
+    "angular-sanitize": "^1.4.7",
     "angular-storage": "0.0.13",
+    "angular-ui-router": "^0.2.15",
+    "babel-runtime": "^5.8.25",
+    "lodash": "^3.10.1",
     "ng-file-upload": "^9.0.3",
     "restangular": "^1.5.1"
   },

@@ -2792,28 +2792,20 @@ angular.module('ngCordova.plugins.ga', [])
 angular.module('ngCordova.plugins.geolocation', [])
 
   .factory('$cordovaGeolocation', ['$q', function ($q) {
-
-      var point;
-      (localStorage.x) && (point=new BMap.Point(localStorage.x,localStorage.y));
     return {
       getCurrentPosition: function (options) {
-        var q = $q.defer();
-        if(point){
-          q.resolve(point);
-          return q.promise;
-        }
+        var defered = $q.defer();
         navigator.geolocation.getCurrentPosition(function (result) {
           var GPSpoint=new BMap.Point(result.coords.longitude,result.coords.latitude);
-          BMap.Convertor.translate(GPSpoint,0,function(data){
-            point=data;
-            q.resolve(point);
+          BMap.Convertor.translate(GPSpoint,0,function(point){
+            defered.resolve(point);
           });
 
         }, function (err) {
-          q.reject(err);
+          defered.reject(err);
         }, options);
 
-        return q.promise;
+        return defered.promise;
       },
 
       watchPosition: function (options) {

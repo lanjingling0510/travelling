@@ -5,7 +5,7 @@ module.exports = angular.module('travelling.add.label.directive', [])
 
 
 /* @ngInject*/
-function labelWrapDirective($animate) {
+function labelWrapDirective() {
     const directive = {
         restict: 'EA',
         replace: true,
@@ -16,12 +16,12 @@ function labelWrapDirective($animate) {
 
 
     /* @ngInject*/
-    function controller($scope, $element) {
+    function controller($scope, $element, $animate) {
         let animating = false;
         this.addLabel = addLabel;
         this.removeLabel = removeLabel;
 
-        function addLabel(name, ele) {
+        function addLabel(ele) {
             const obj = ele.clone();
             if (animating) return false;
             animating = true;
@@ -30,18 +30,13 @@ function labelWrapDirective($animate) {
                 .then(() => {
                     obj.removeClass('ani-label');
                     obj.remove();
-                    $scope.vm.labelsArray.push(name);
-                    $scope.label.on = true;
+                    $scope.label.selected = true;
                     animating = false;
                 });
         }
 
-        function removeLabel(name) {
-            const index = $scope.vm.labelsArray.findIndex((value) => value === name);
-            if (index !== -1) {
-                $scope.label.on = false;
-                $scope.vm.labelsArray.splice(index, 1);
-            }
+        function removeLabel() {
+                $scope.label.selected = false;
         }
     }
 
@@ -56,7 +51,6 @@ function labelAddDirective() {
         replace: true,
         scope: {
             bg: '@',
-            name: '@',
         },
         require: '^labelWrap',
         template: '<span ng-click="addLabel()" ng-style="{\'background-image\':\'url(\'+bg+\')\'}"></span>',
@@ -64,7 +58,7 @@ function labelAddDirective() {
     };
 
     function link($scope, $ele, $attr, $transclude) {
-        $scope.addLabel = () => $transclude.addLabel($scope.name, $ele);
+        $scope.addLabel = () => $transclude.addLabel($ele);
     }
 
     return directive;
@@ -75,9 +69,7 @@ function labelRemoveDirective() {
     const directive = {
         restrict: 'EA',
         replace: true,
-        scope: {
-            name: '@',
-        },
+        scope: {},
         require: '^labelWrap',
         template: '<span ng-click="removeLabel()">' +
         '<img src="images/add-button.png" style="margin:25%;width:50%" alt=""/>' +
@@ -87,7 +79,7 @@ function labelRemoveDirective() {
 
     function link($scope, $ele, $attr, $transclude) {
         $scope.removeLabel = function () {
-            $transclude.removeLabel($scope.name);
+            $transclude.removeLabel();
         };
     }
 

@@ -1,3 +1,4 @@
+
 .add-label-search {
     height: 30%;
     border-radius: 40px;
@@ -26,6 +27,10 @@
     position: relative;
 }
 
+.add-label-wrap.col-25{
+    -webkit-box-flex:1;
+}
+
 .add-label-col {
     position: absolute;
     top: 0;
@@ -45,7 +50,7 @@
 
 .add-label-close {
     background: rgba(0, 0, 0, 0.4);
-    -webkit-transform: rotate(45deg);
+    transform: rotate(45deg);
 }
 
 .add-label-name {
@@ -70,6 +75,8 @@
         opacity: 0;
     }
 }
+
+
 
 .add-label-close.ng-hide-remove {
     animation: ng-hide-remove 0.5s ease-out both;

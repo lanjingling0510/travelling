@@ -10,23 +10,20 @@
                 <i ng-hide="ionic.Platform.device().available"
                    ngf-select ng-model="vm.pictureFile"
                    ngf-pattern="'image/*'"
+                   ngf-multiple='false'
                    ngf-change="vm.addImageByWeb($files)"
+                   ngf-resize="{width: 500, height: 300, quality: .8}"
                    accept="image/*"
                    ngf-max-size="3MB"
-                   ngf-capture="'camera'"
                    class="icon ion-plus-round positive"></i>
             </ion-item>
         </div>
         <ul class="row row-wrap">
-            <li class="col col-33" ng-repeat="img in tpl_list">
-                <div class="pic-wrap" delete-item>
-                    <div class="pic-progress-wrap">
-                        <div class="pic-progress"></div>
-                    </div>
-                    <span ng-show="img.close" class="pic-delete-btn"></span>
-
-                    <div ng-class="{ani_shake:img.close}" class="pic-content"
-                         ng-style="{'background-image':'url('+img.url+')'}"></div>
+            <li class="col col-33" ng-repeat="img in vm.images">
+                <div class="add-img-wrap">
+                    <span class="add-img-delete" ng-click="vm.removeImage($index)"></span>
+                    <div class="add-img-content"
+                         ng-style="{'background-image':'url('+img+')'}"></div>
                 </div>
             </li>
         </ul>
@@ -34,8 +31,8 @@
 
     <div class="bar bar-light bar-subfooter" style="height:120px">
         <div>
-            <a class="button button-balanced button-block" ng-click="submitShare()">发布</a>
-            <a href="" class="button button-assertive button-block">清除</a>
+            <a class="button button-balanced button-block" ng-click="vm.submitShare()">发布</a>
+            <a href="" class="button button-assertive button-block" ng-click="vm.clearShare()">清除</a>
         </div>
     </div>
 

@@ -1,4 +1,5 @@
-module.exports = angular.module('travelling.register', [])
+module.exports = angular.module('travelling.register', [
+])
     .config(moduleConfig)
     .controller('registerController', registerController);
 
@@ -21,6 +22,7 @@ function registerController(Restangular, AlertService) {
     const vm = this;
     const User = Restangular.all('user');
     vm.register = register;
+
 
     function register(user) {
         User.post(user).then(() => {

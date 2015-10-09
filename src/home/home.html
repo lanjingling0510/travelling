@@ -9,19 +9,29 @@
     </ion-nav-buttons>
 
 
-    <div class="bar bar-subheader">
-        <div class="button-bar">
-            <a class="button  button-clear">分类 <i class="icon ion-android-arrow-dropdown"></i></a>
-            <a class="button  button-clear">排序 <i class="icon ion-android-arrow-dropdown"></i></a>
-            <a class="button  button-clear">筛选 <i class="icon ion-android-arrow-dropdown"></i></a>
-        </div>
-    </div>
+    <drop-down>
+        <sub-drop-down  title="分类">
+            <ion-radio ng-repeat="label in vm.labelsList" name="label" ng-model="vm.query.label" ng-value="label._id" ng-change="vm.getShareList({icon: label.icon})">{{label.name}}</ion-radio>
+        </sub-drop-down>
 
-    <ion-content class="padding has-subheader"  scroll="false">
-        <ion-slide-box  on-slide-changed="slideChange($index)">
-            <ion-slide  style="height:140px; background-color:red">
+        <sub-drop-down title="排序">
+            <ion-radio name="order" ng-model="vm.query.orderBy" ng-value="'score'" ng-change="vm.getShareList()">推荐</ion-radio>
+            <ion-radio name="order" ng-model="vm.query.orderBy" ng-value="'near'" ng-change="vm.getShareList()">距离</ion-radio>
+            <ion-radio name="order" ng-model="vm.query.orderBy" ng-value="'date'" ng-change="vm.getShareList()">最新</ion-radio>
+        </sub-drop-down>
 
+        <sub-drop-down title="选项">
+            <ion-toggle ng-model="config.toggleNav" toggle-class="toggle-calm">开启导航</ion-toggle>
+        </sub-drop-down>
+    </drop-down>
+
+    <ion-content class="has-subheader"  scroll="false">
+        <ion-slide-box  on-slide-changed="vm.slideChange($index)" style="height:30%;">
+            <ion-slide  ng-repeat="share in vm.shareList | limitTo:5 track by share._id">
+                <img ng-src="{{share.images[0]}}" alt="" width="100%"/>
             </ion-slide>
         </ion-slide-box>
+
+        <div id="home-map" class="map"></div>
     </ion-content>
 </ion-view>

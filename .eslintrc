@@ -6,6 +6,7 @@
                // http://eslint.org/docs/rules/no-use-before-define
         "space-before-function-paren": [2, {"anonymous": "always", "named": "never"}], // http://eslint.org/docs/rules/space-before-function-paren
         "func-names": 0,                 // http://eslint.org/docs/rules/func-names
-      "block-scoped-var": 0          // http://eslint.org/docs/rules/block-scoped-var
+      "block-scoped-var": 0,          // http://eslint.org/docs/rules/block-scoped-var
+      "camelcase": 0
     }
 }

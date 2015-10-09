@@ -22,31 +22,36 @@ function ModuleConfig($stateProvider) {
 }
 
 /* @ngInject */
-function AddLabelController($scope, store, $state) {
+function AddLabelController($scope, store, $state, $rootScope, Restangular) {
     const vm = this;
+    const Labels = Restangular.all('label');
     // With the new view caching in Ionic, Controllers are only called
     // when they are recreated or on app start, instead of every page change.
     // To listen for when this page is active (for example, to refresh data),
     // listen for the $ionicView.enter event:
     //
     $scope.$on('$ionicView.enter', function () {
-        vm.labelsArray = store.get('share.labels') || [];
+        vm.labelsList = Labels.getList().$object;
     });
 
-    vm.labelsArray = [];
-    vm.labelsList = [
-        {image: './images/label-view.png', name: '风景', on: false},
-        {image: './images/label-play.png', name: '娱乐', on: false},
-        {image: './images/label-cart.png', name: '购物', on: false},
-        {image: './images/label-room.png', name: '酒店', on: false},
-        {image: './images/label-food.png', name: '美食', on: false},
-    ];
-
-    store.remove('share.labels');
     vm.nextPage = nextPage;
 
+    initController();
+
     function nextPage() {
-        store.set('share.labels', vm.labelsArray);
+        store.set('share.labels', vm.labelsList.filter(value => value.selected === true).map(value => value._id));
         $state.go('tab.add-text');
+    }
+
+
+    function initController() {
+        store.remove('share.city');
+        store.remove('share.labels');
+        store.remove('share.text');
+        store.remove('share.coordinates');
+        store.remove('share.place');
+        if (!$rootScope.auth) {
+            $state.go('login');
+        }
     }
 }
