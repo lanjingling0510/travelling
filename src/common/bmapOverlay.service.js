@@ -48,8 +48,7 @@ function BMapOverlayService() {
 
     // 实现绘制方法
     ToolTopOverlay.prototype.draw = function () {
-// 根据地理坐标转换为像素坐标，并设置给容器
-        console.log(this._height);
+        // 根据地理坐标转换为像素坐标，并设置给容器
         const position = this._map.pointToOverlayPixel(this._center);
         this._div.style.left = position.x - this._width / 2 + 'px';
         this._div.style.top = position.y - this._height - 70 + 'px';

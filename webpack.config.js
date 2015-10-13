@@ -1,7 +1,7 @@
 /* eslint-disable */
 var path = require('path');
 var webpack = require('webpack');
-var cssnext = require('cssnext');
+//var cssnext = require('cssnext');
 var autoprefixer = require('autoprefixer');
 /* eslint-enable */
 
@@ -34,7 +34,7 @@ module.exports = {
             {test: /\.woff(2)?(\?v=\d(\.\d){2})?$/, loader: 'url?limit=10000&minetype=application/font-woff'},
         ],
     },
-    postcss: [cssnext, autoprefixer],
+    postcss: [autoprefixer],
     plugins: [
         new webpack.ProvidePlugin({
             _: 'lodash',

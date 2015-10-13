@@ -33,6 +33,7 @@ function HomeController($cordovaGeolocation, AlertService, Restangular, $timeout
 
     vm.getShareList = getShareList;
     vm.slideChange = clickMarker;
+    vm.getLocation = getLocation;
 
     vm.query = {
         page: 0,
@@ -100,7 +101,7 @@ function HomeController($cordovaGeolocation, AlertService, Restangular, $timeout
                 map.addOverlay(arrowMarker = new BMap.Marker(point, {icon: arrIcon}));
                 vm.query.center = [point.lng, point.lat].join(',');
                 map.centerAndZoom(point, 18);
-                getShareList();
+                getShareListAndShowToolTop();
             });
     }
 
@@ -109,32 +110,53 @@ function HomeController($cordovaGeolocation, AlertService, Restangular, $timeout
     //  事件
     //  ================================
 
-
-    //  定位成功事件
-    function locationSuccess(point) {
-        let address = '';
-        address += e.addressComponent.province;
-        address += e.addressComponent.city;
-        address += e.addressComponent.district;
-        address += e.addressComponent.street;
-        address += e.addressComponent.streetNumber;
-        arrowMarker.setPosition(point);
-        vm.query.center = [point.lng, point.lat].join(',');
-        map.panTo(point);
-    }
-
-
     //  地图缩放触发事件
     function zoomend() {
-        getShareList();
+        getShareListAndShowToolTop();
     }
 
 
     //  地图拖动触发事件
     function dragend() {
         if (!vm.config.watchPosition) {
-            getShareList();
+            getShareListAndShowToolTop();
         }
+    }
+
+
+    //  定位
+    function getLocation() {
+        $cordovaGeolocation.getCurrentPosition({enableHighAccuracy: false})
+            .then(point => {
+                map.panTo(point);
+                vm.query.center = [point.lng, point.lat].join(',');
+                arrowMarker.setPosition(point);
+                getShareList().then(list => {
+                    list.forEach(value => {
+                        const point = new BMap.Point(value.coordinates[0], value.coordinates[1]);
+                        addMarker(point, value).then((marker) => {
+                            marker.div.addClass('ani-marker-big');
+                            vm.config.activeMarker = marker;
+                        });
+                    });
+                });
+            });
+    }
+
+
+    //  获得分享列表然后继续添加marker，toolTop
+    function getShareListAndShowToolTop() {
+        getShareList().then(list => {
+            list.forEach(value => {
+                const point = new BMap.Point(value.coordinates[0], value.coordinates[1]);
+                addMarker(point, value).then((marker) => {
+                    map.panTo(marker.activePoint);
+                    marker.toolTop.show();
+                    marker.div.addClass('ani-marker-big');
+                    vm.config.activeMarker = marker;
+                });
+            });
+        });
     }
 
 
@@ -148,7 +170,6 @@ function HomeController($cordovaGeolocation, AlertService, Restangular, $timeout
             map.removeOverlay(value);
         });
 
-
         markerList = [];
 
         const bounds = map.getBounds();
@@ -157,65 +178,64 @@ function HomeController($cordovaGeolocation, AlertService, Restangular, $timeout
         vm.query.sw = sw.lng + ',' + sw.lat;
         vm.query.ne = ne.lng + ',' + ne.lat;
 
-        $timeout.cancel(timer);
-        timer = $timeout(() => {
-            if (orderBy === 'near') {
-                Shares.one('near').get(vm.query).then(result => {
-                    vm.shareList = result;
-                    console.log('shares count: %s', result.length);
-                    $ionicSlideBoxDelegate.update();
-                    $ionicSlideBoxDelegate.slide(0);
-                    result.forEach(value => {
-                        const point = new BMap.Point(value.coordinates[0], value.coordinates[1]);
-                        addMarker(point, icon);
+        return new Promise(resolve => {
+            $timeout.cancel(timer);
+            timer = $timeout(() => {
+                if (orderBy === 'near') {
+                    Shares.one('near').get(vm.query).then(result => {
+                        vm.shareList = result;
+                        console.log('shares count: %s', result.length);
+                        $ionicSlideBoxDelegate.update();
+                        $ionicSlideBoxDelegate.slide(0);
+                        resolve(result);
                     });
-                });
-            } else {
-                Shares.getList(vm.query).then(result => {
-                    vm.shareList = result;
-                    console.log('shares count: %s', result.length);
-                    $ionicSlideBoxDelegate.update();
-                    $ionicSlideBoxDelegate.slide(0);
-                    result.forEach(value => {
-                        const point = new BMap.Point(value.coordinates[0], value.coordinates[1]);
-                        addMarker(point, icon, value);
+                } else {
+                    Shares.getList(vm.query).then(result => {
+                        vm.shareList = result;
+                        console.log('shares count: %s', result.length);
+                        $ionicSlideBoxDelegate.update();
+                        $ionicSlideBoxDelegate.slide(0);
+                        resolve(result);
                     });
-                });
-            }
-        }, 200);
+                }
+            }, 200);
+        });
     }
 
 
     //  添加marker浮标
-    function addMarker(point, icon, share) {
+    function addMarker(point, share) {
+        const icon = vm.config.nowIcon;
         const marker = new BMap.Marker(point, {icon: icon});
-        let markerDiv;
         let activePoint;
+        let markerDiv;
+
+        //  为marker绑定share信息和toolTop
+        addToolTop(marker, share);
 
         map.addOverlay(marker);
-        addToolTop(marker, share);
-        markerDiv = angular.element(marker.oc);
+        marker.div = markerDiv = angular.element(marker.oc);
         activePoint = new BMap.Point(point.lng, (vm.config.ne.lat - vm.config.sw.lat) / 3 + point.lat);
         marker.activePoint = activePoint;
-
-        //  为marker添加动画类
-        $animate.addClass(markerDiv, 'ani-marker')
-            .then(() => {
-                markerList.push(marker);
-                markerDiv.parent().css('zIndex', 0);
-                if (markerList.length === 1) {
-                    map.panTo(activePoint);
-                    marker.toolTop.show();
-                    markerDiv.addClass('ani-marker-big');
-                    vm.config.activeMarker = marker;
-                }
-            });
 
         //  点击marker浮标添加动画类
         marker.addEventListener('click', function () {
             const index = markerList.findIndex(value => value === marker);
             clickMarker(index);
         }, false);
+
+        //  return promise
+        return new Promise((resolve) => {
+            //  为marker添加动画类
+            $animate.addClass(markerDiv, 'ani-marker')
+                .then(() => {
+                    markerDiv.removeClass('ani-marker');
+                    markerList.push(marker);
+                    if (markerList.length === 1) {
+                        resolve(marker);
+                    }
+                });
+        });
     }
 
 
