@@ -15,6 +15,11 @@ function ModuleConfig($stateProvider) {
             'tab-add': {
                 template: require('./add_label.html'),
                 controller: 'AddLabelController as vm',
+                resolve: {
+                    profile: ['Authorization', function (Authorization) {
+                        return Authorization();
+                    }],
+                },
             },
         },
 
@@ -22,7 +27,7 @@ function ModuleConfig($stateProvider) {
 }
 
 /* @ngInject */
-function AddLabelController($scope, store, $state, $rootScope, Restangular) {
+function AddLabelController($scope, store, $state, Restangular) {
     const vm = this;
     const Labels = Restangular.all('label');
     // With the new view caching in Ionic, Controllers are only called
@@ -31,12 +36,11 @@ function AddLabelController($scope, store, $state, $rootScope, Restangular) {
     // listen for the $ionicView.enter event:
     //
     $scope.$on('$ionicView.enter', function () {
-        vm.labelsList = Labels.getList().$object;
+        initController();
     });
 
     vm.nextPage = nextPage;
 
-    initController();
 
     function nextPage() {
         store.set('share.labels', vm.labelsList.filter(value => value.selected === true).map(value => value._id));
@@ -45,13 +49,12 @@ function AddLabelController($scope, store, $state, $rootScope, Restangular) {
 
 
     function initController() {
+        vm.labelsList = Labels.getList().$object;
+
         store.remove('share.city');
         store.remove('share.labels');
         store.remove('share.text');
         store.remove('share.coordinates');
         store.remove('share.place');
-        if (!$rootScope.auth) {
-            $state.go('login');
-        }
     }
 }

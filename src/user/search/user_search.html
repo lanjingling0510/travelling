@@ -1,0 +1,25 @@
+<ion-view view-title="搜索好友">
+
+    <ion-nav-bar class="bar-positive">
+        <ion-nav-buttons side="left">
+            <button class="button icon-left ion-ios-arrow-back button-icon"  ng-click="goBack()">返回</button>
+        </ion-nav-buttons>
+    </ion-nav-bar>
+
+    <!-- 页面内容-->
+    <ion-content>
+        <div class="list list-inset">
+            <label class="item item-input">
+                <i class="icon ion-search placeholder-icon"></i>
+                <input type="text" placeholder="'查找好友" ng-model="vm.query.keyword" ng-change="vm.inputChange()">
+            </label>
+        </div>
+
+        <ion-list>
+            <ion-item ng-repeat="user in vm.users track by user._id" class="item-avatar-left" ui-sref="user-detail({_id: user._id})">
+                <img ng-src="{{user.avatar}}">
+                <h2>{{user.nickname}}</h2>
+            </ion-item>
+        </ion-list>
+    </ion-content>
+</ion-view>

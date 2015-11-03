@@ -1,7 +1,7 @@
-
 module.exports = angular.module('travelling.common.services')
     .config(['$httpProvider', moduleConfig])
-    .factory('BearerInterceptor', BearerInterceptor);
+    .factory('BearerInterceptor', BearerInterceptor)
+    .factory('Authorization', Authorization);
 
 
 /* @ngInject */
@@ -42,5 +42,19 @@ function BearerInterceptor($rootScope, $q, $injector) {
             }
             return $q.reject(rejection);
         },
+    };
+}
+
+/* @ngInject */
+function Authorization($q, $rootScope) {
+    return function () {
+        const dfd = $q.defer();
+        if ($rootScope.auth) {
+            dfd.resolve($rootScope.auth.profile);
+        } else {
+            dfd.reject('未登录');
+        }
+
+        return dfd.promise;
     };
 }

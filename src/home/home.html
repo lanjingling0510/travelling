@@ -1,23 +1,19 @@
 <ion-view view-title="导航">
 
-    <ion-nav-buttons side="left">
-        <button menu-toggle="left" class="button button-icon icon ion-navicon"></button>
-    </ion-nav-buttons>
-
     <ion-nav-buttons side="right">
-        <button  class="button button-icon icon ion-search"></button>
+        <button  class="button button-icon icon ion-android-person-add" ui-sref="user-search"></button>
     </ion-nav-buttons>
 
 
     <drop-down>
         <sub-drop-down  title="分类">
-            <ion-radio ng-repeat="label in vm.labelsList" name="label" ng-model="vm.query.label" ng-value="label._id" ng-change="vm.getShareList({icon: label.icon})">{{label.name}}</ion-radio>
+            <ion-radio ng-repeat="label in vm.labelsList" name="label" ng-model="vm.query.label" ng-value="label._id" ng-change="vm.getShareListAndShowToolTop({iconUrl: label.iconUrl})">{{label.name}}</ion-radio>
         </sub-drop-down>
 
         <sub-drop-down title="排序">
-            <ion-radio name="order" ng-model="vm.query.orderBy" ng-value="'score'" ng-change="vm.getShareList()">推荐</ion-radio>
-            <ion-radio name="order" ng-model="vm.query.orderBy" ng-value="'near'" ng-change="vm.getShareList()">距离</ion-radio>
-            <ion-radio name="order" ng-model="vm.query.orderBy" ng-value="'date'" ng-change="vm.getShareList()">最新</ion-radio>
+            <ion-radio name="order" ng-model="vm.query.orderBy" ng-value="'score'" ng-change="vm.getShareListAndShowToolTop()">推荐</ion-radio>
+            <ion-radio name="order" ng-model="vm.query.orderBy" ng-value="'near'" ng-change="vm.getShareListAndShowToolTop()">距离</ion-radio>
+            <ion-radio name="order" ng-model="vm.query.orderBy" ng-value="'date'" ng-change="vm.getShareListAndShowToolTop()">最新</ion-radio>
         </sub-drop-down>
 
         <sub-drop-down title="选项">
@@ -26,15 +22,15 @@
     </drop-down>
 
     <ion-content class="has-subheader"  scroll="false">
-        <ion-slide-box  on-slide-changed="vm.slideChange($index)" style="height:30%;">
+        <ion-slide-box ng-show="vm.shareList.length !== 0" on-slide-changed="vm.slideChange($index)" style="height:30%;">
             <ion-slide  ng-repeat="share in vm.shareList | limitTo:5 track by share._id">
                 <img ng-src="{{share.images[0]}}" alt="" width="100%"/>
             </ion-slide>
         </ion-slide-box>
 
-        <div id="home-map" class="map"></div>
+        <div id="home-map" class="map" ng-style="{height: vm.shareList.length === 0 ? '100%' : '70%'}"></div>
 
-        <div class="home-location" ng-click="vm.getLocation()">
+        <div class="home-location" on-touch="vm.getLocation()">
         </div>
     </ion-content>
 </ion-view>

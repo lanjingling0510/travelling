@@ -43,6 +43,8 @@ function loginController($rootScope, store, AlertService, $state, Restangular) {
     }
 
     function initController() {
+        $rootScope.logout();
+
         vm.user = {
             username: '',
             password: '',

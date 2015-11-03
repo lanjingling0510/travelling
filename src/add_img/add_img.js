@@ -21,7 +21,7 @@ function ModuleConfig($stateProvider) {
 }
 
 /* @ngInject*/
-function AddImgController($rootScope, $scope, $state, AlertService, store, UploadFile, AddImageByApp, Restangular, $ionicHistory) {
+function AddImgController($rootScope, $state, AlertService, store, UploadFile, AddImageByApp, Restangular, $ionicHistory, $ionicLoading) {
     const vm = this;
     vm.addImageByApp = addImageByApp;
     vm.addImageByWeb = addImageByWeb;
@@ -38,15 +38,22 @@ function AddImgController($rootScope, $scope, $state, AlertService, store, Uploa
     }
 
 
-    function addImageByWeb(files) {
-        if (!files || files.length === 0) return false;
+    function addImageByWeb(file) {
+        if (!file) return false;
+
+        $ionicLoading.show({
+            template: '<ion-spinner icon="ripple"></ion-spinner><span class="wenzi">上传中...</span>',
+            hideOnStageChange: true,
+        });
 
         UploadFile({ // eslint-disable-line new-cap
-            files: files,
+            file: file,
         }).then(result => {
-            vm.images.push(...result.data);
+            vm.images.push(result.data);
         }).catch((err) => {
             AlertService.warning(err.data);
+        }).finally(() => {
+            $ionicLoading.hide();
         });
     }
 
@@ -57,6 +64,11 @@ function AddImgController($rootScope, $scope, $state, AlertService, store, Uploa
 
 
     function submitShare() {
+        if (vm.images.length === 0) {
+            AlertService.warning('请上传照片');
+            return;
+        }
+
         const share = {
             city: store.get('share.city'),
             labels: store.get('share.labels'),
@@ -80,11 +92,6 @@ function AddImgController($rootScope, $scope, $state, AlertService, store, Uploa
 
     function clearShare() {
         vm.images = [];
-        store.remove('share.city');
-        store.remove('share.labels');
-        store.remove('share.text');
-        store.remove('share.coordinates');
-        store.remove('share.place');
         $state.go('tab.add-label');
     }
 

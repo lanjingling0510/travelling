@@ -1,9 +1,77 @@
-<ion-view view-title="Account">
-    <ion-content>
-        <ion-list>
-            <ion-toggle  ng-model="settings.enableFriends">
-                Enable Friends
-            </ion-toggle>
-        </ion-list>
+<ion-view view-title="个人">
+
+    <ion-nav-buttons side="right">
+        <button class="button button-icon icon ion-ios-person-outline" ng-click="vm.openPopover($event)"></button>
+    </ion-nav-buttons>
+
+    <ion-content style="background-color:rgba(204, 204, 204, 0.2);">
+
+        <!-- 个人信息签名-->
+        <div class="list card">
+            <div class="item item-avatar">
+                <img ng-src="{{vm.user.avatar}}">
+
+                <h2>{{vm.user.nickname}}</h2>
+
+                <p>游言：踏破铁鞋无觅处，得来全不费工夫。</p>
+            </div>
+        </div>
+
+        <!--个人分享，关注，粉丝-->
+        <div class="row text-center">
+            <a class="col" ui-sref="share-list({_id: vm._id, type: 'list'})">
+                <div class="account-label">
+                    <span>{{vm.user.sharesNumber}}</span><br>
+                    游记
+                </div>
+
+            </a>
+            <a class="col" ui-sref="user-list({_id: vm._id, type: 'fans'})">
+                <div class="account-label">
+                    <span>{{vm.user.followingsNumber}}</span><br>
+                    关注
+                </div>
+            </a>
+            <a class="col" ui-sref="user-list({_id: vm._id, type: 'followings'})">
+                <div class="account-label">
+                    <span>{{vm.user.fansNumber}}</span><br>
+                    粉丝
+                </div>
+            </a>
+            <a class="col" ui-sref="share-list({_id: vm._id, type: 'collect'})">
+                <div class="account-label">
+                    <span>{{vm.user.collectionsNumber}}</span><br>
+                    收藏
+                </div>
+            </a>
+        </div>
+        <!--个人分享列表-->
+
+        <div ui-sref="share-detail({_id: share._id})" class="list card" ng-repeat="share in vm.shares track by share._id">
+
+            <div class="item item-image">
+                <img ng-src="{{share.images[0]}}">
+            </div>
+
+            <div class="item item-text-wrap">
+                {{share.text}}
+            </div>
+
+            <div class="item tabs tabs-icon-left card-share-tabs">
+                <a class="tab-item card-share-tab" href="#">
+                    <i class="icon ion-android-star-half"></i>
+                    {{share.score}}
+                </a>
+                <a class="tab-item card-share-tab" href="#">
+                    <i class="icon ion-chatbox"></i>
+                    {{share.replys.length}}
+                </a>
+                <a class="tab-item card-share-tab" href="#">
+                    <i class="icon ion-bookmark"></i>
+                    {{share.favorited.length}}
+                </a>
+            </div>
+
+        </div>
     </ion-content>
 </ion-view>

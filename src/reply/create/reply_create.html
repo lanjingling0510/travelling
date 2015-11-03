@@ -1,0 +1,21 @@
+<ion-view title="评价">
+
+    <ion-content class="padding">
+        <ul class="list list-borderless">
+            <li class="item">
+                评分地点
+                    <reply-stars ng-model="vm.reply.score"></reply-stars>
+            </li>
+
+            <li class="item item-body">
+                <textarea required class="padding" ng-model="vm.reply.text" placeholder="发表评论..."
+                          style=";border-radius:10px;height:150px;width:100%;box-shadow: 2px 2px 5px rgba(0,0,0,0.5);">
+                </textarea>
+            </li>
+
+            <li class="item">
+                <a class="button button-full button-positive" ng-click="vm.createReply(vm.reply)">评价</a>
+            </li>
+        </ul>
+    </ion-content>
+</ion-view>

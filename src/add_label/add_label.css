@@ -41,7 +41,6 @@
     border-radius: 50%;
     background: #6dff36;
     color: #fff;
-    -webkit-transform: translate3D(0, 0, 0);
     transform: translate3D(0, 0, 0);
     display: inline-block;
     z-index: 1;

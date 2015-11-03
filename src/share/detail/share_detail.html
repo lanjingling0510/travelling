@@ -1,0 +1,85 @@
+<ion-view title="分享详情">
+
+    <!-- 页面头部-->
+    <ion-nav-bar class="bar-positive">
+        <ion-nav-buttons side="left">
+            <button class="button icon-left ion-ios-arrow-back button-icon" ng-click="goBack()">返回</button>
+        </ion-nav-buttons>
+    </ion-nav-bar>
+
+
+    <ion-content class="padding">
+        <!--分享内容-->
+        <ul class="list">
+            <li class="item item-icon-left item-borderless" style=" color: rgb(255, 148, 26);">
+                <i class="icon ion-ios-location assertive"></i>
+                {{vm.share.place}}
+                <span class="assertive item-note" style="font-size:20px">{{vm.share.score}}分</span>
+            </li>
+            <li class="item item-text-wrap item-borderless">
+                {{vm.share.text}}
+            </li>
+            <li class="item item-image" ng-repeat="image in vm.share.images">
+                <img ng-src="{{image}}" alt=""/>
+            </li>
+            <li class="item item-avatar-left item-borderless">
+                <img src="/images/avatar.jpg" alt=""/>
+                <h2> 来自 <span class="assertive"  ui-sref="user-detail({_id: vm.share.userId._id})">{{vm.share.userId.nickname}}</span></h2>
+                <p>{{vm.share.date | convertDate}}</p>
+            </li>
+            <li class="item tabs tabs-icon-left card-share-tabs item-borderless">
+
+
+                <a class="tab-item card-share-tab" href="#" ng-show="vm.share.userId._id === vm._id"></a>
+                <a class="tab-item card-share-tab" href="#" ng-show="vm.share.userId._id === vm._id"></a>
+                <a class="tab-item card-share-tab" ng-click="vm.removeShare()" ng-show="vm.share.userId._id === vm._id">
+                    <i class="icon ion-trash-a"></i>
+                    删除
+                </a>
+
+
+
+                <a class="tab-item card-share-tab" href="#" ng-show="vm.share.userId._id != vm._id"></a>
+                <a class="tab-item card-share-tab" ng-click="vm.collectShare()" ng-show="vm.share.userId._id != vm._id && vm.isCollect === 'uncollect'">
+                    <i class="icon ion-android-bookmark"></i>
+                    收藏
+                </a>
+                <a class="tab-item card-share-tab" ng-click="vm.uncollectShare()" ng-show="vm.share.userId._id != vm._id && vm.isCollect === 'collect'">
+                    <i class="icon ion-android-bookmark"></i>
+                    取消收藏
+                </a>
+                <a class="tab-item card-share-tab"  ui-sref="reply-create({_id: vm.share._id})" ng-show="vm.share.userId._id != vm._id">
+                    <i class="icon ion-chatbox-working"></i>
+                    评论
+                </a>
+
+
+            </li>
+
+
+        </ul>
+
+        <!-- 评价列表内容-->
+        <ion-list>
+            <ion-item ng-repeat="reply in vm.replys">
+                <ul class="list  list-borderless">
+
+                    <li class="item item-avatar-left">
+                        <img src="/images/avatar.jpg" alt=""/>
+                        <h4  ui-sref="user-detail({_id: reply.userId._id})">{{reply.userId.nickname}}</h4>
+                        <span class="assertive" ng-bind-html="reply.score |  convertSCore"></span>
+                    </li>
+
+                    <li class="item row-no-padding item-text-wrap">
+                        <p>{{reply.text}}</p>
+                         <small class="item-note">
+                               {{reply.date | convertDate}}
+                         </small>
+                    </li>
+
+                </ul>
+            </ion-item>
+        </ion-list>
+
+    </ion-content>
+</ion-view>

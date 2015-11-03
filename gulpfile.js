@@ -1,11 +1,14 @@
+/* eslint-disable */
 /*========================================
  =            Requiring stuffs            =
  ========================================*/
 
-
 var gulp = require('gulp'),
     weinre = require('gulp-weinre'),
-    path = require('path');
+    path = require('path'),
+    sass = require('gulp-sass'),
+    rename = require('gulp-rename'),
+    minifyCss = require('gulp-minify-css');
 
 /*=====================================
  =        Default Configuration        =
@@ -19,7 +22,7 @@ var config = {
     },
     weinre: {
          httpPort:     8001,
-        boundHost:    '192.168.1.111',
+        boundHost:    '192.168.31.219',
         verbose:      false,
         debug:        false,
         readTimeout:  5,
@@ -43,6 +46,24 @@ gulp.task('weinre', function() {
   }
 });
 
+
+/*================================================
+ =            CSS sass            =
+ ================================================*/
+
+gulp.task('sass', function(done) {
+    gulp.src('./scss/ionic.scss')
+        .pipe(sass({
+            errLogToConsole: true
+        }))
+        .pipe(gulp.dest('./src/app/lib/ionic/css'))
+        .pipe(minifyCss({
+            keepSpecialComments: 0
+        }))
+        .pipe(rename({ extname: '.css' }))
+        .pipe(gulp.dest('./src/app/lib/ionic/css'))
+        .on('end', done);
+});
 
 
 /*================================================

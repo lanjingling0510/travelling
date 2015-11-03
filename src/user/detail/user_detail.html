@@ -1,0 +1,55 @@
+<ion-view view-title="{{vm.user.nickname}}">
+
+    <!-- 页面头部-->
+    <ion-nav-bar class="bar-positive">
+        <ion-nav-buttons side="left">
+            <button class="button icon-left ion-ios-arrow-back button-icon" ng-click="goBack()">返回</button>
+        </ion-nav-buttons>
+    </ion-nav-bar>
+
+    <ion-content style="background-color:rgba(204, 204, 204, 0.2);">
+
+        <!-- 个人信息签名-->
+        <div class="list card">
+            <div class="item item-avatar">
+                <img ng-src="{{vm.user.avatar}}">
+                <p>游言：踏破铁鞋无觅处，得来全不费工夫。</p>
+            </div>
+        </div>
+
+        <!--个人分享，关注，粉丝-->
+        <div class="row text-center">
+            <a class="col" ui-sref="share-list({_id: vm._id, type: 'list'})">
+                <div class="account-label">
+                    <span>{{vm.user.sharesNumber}}</span><br>
+                    游记
+                </div>
+
+            </a>
+            <a class="col">
+                <div class="account-label text-gray">
+                    <span>{{vm.user.followingsNumber}}</span><br>
+                    关注
+                </div>
+            </a>
+            <a class="col">
+                <div class="account-label text-gray">
+                    <span>{{vm.user.fansNumber}}</span><br>
+                    粉丝
+                </div>
+            </a>
+            <a class="col"  ui-sref="share-list({_id: vm._id, type: 'collect'})">
+                <div class="account-label">
+                    <span>{{vm.user.collectionsNumber}}</span><br>
+                    收藏
+                </div>
+            </a>
+        </div>
+
+        <!-- 操作-->
+        <div class="padding">
+            <a class="button button-positive button-block" ng-click="vm.followUser()" ng-if="vm.isFollow === 'unfollow'">关注</a>
+            <a class="button button-assertive button-block" ng-click="vm.unfollowUser()" ng-if="vm.isFollow ==='follow'">取消关注</a>
+        </div>
+    </ion-content>
+</ion-view>

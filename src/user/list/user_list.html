@@ -1,0 +1,26 @@
+<ion-view view-title="{{vm.title}}">
+
+    <ion-nav-bar class="bar-positive">
+        <ion-nav-buttons side="left">
+            <button class="button icon-left ion-ios-arrow-back button-icon"  ng-click="goBack()">返回</button>
+        </ion-nav-buttons>
+    </ion-nav-bar>
+
+    <!-- 页面内容-->
+    <ion-content>
+        <ion-refresher
+                pulling-text="Pull to refresh..."
+                on-refresh="vm.doRefresh()">
+        </ion-refresher>
+
+        <ion-list can-swipe="vm.shouldShowDelete">
+            <ion-item ng-repeat="user in vm.users track by user._id" class="item-text-wrap item-avatar-left" ui-sref="user-detail({_id: user._id})">
+                <img ng-src="{{user.avatar}}">
+                <h2>{{user.nickname}}</h2>
+                <ion-option-button class="button-assertive" ng-click="vm.cancelFollow($index)">
+                    取消关注
+                </ion-option-button>
+            </ion-item>
+        </ion-list>
+    </ion-content>
+</ion-view>

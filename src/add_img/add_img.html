@@ -11,8 +11,8 @@
                    ngf-select ng-model="vm.pictureFile"
                    ngf-pattern="'image/*'"
                    ngf-multiple='false'
-                   ngf-change="vm.addImageByWeb($files)"
-                   ngf-resize="{width: 500, height: 300, quality: .8}"
+                   ngf-change="vm.addImageByWeb($file)"
+                   ngf-resize="{width: 500, height: 300}"
                    accept="image/*"
                    ngf-max-size="3MB"
                    class="icon ion-plus-round positive"></i>

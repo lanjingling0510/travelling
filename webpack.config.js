@@ -26,7 +26,7 @@ module.exports = {
     module: {
         loaders: [
             {test: /\.js$/, exclude: /(node_modules|lib)/, loader: 'ng-annotate!babel?stage=0'},
-            {test: /\.css$/, loader: 'style!css!postcss-loader'},
+            {test: /\.css$/, exclude: /(lib)/, loader: 'style!css!postcss-loader'},
             {test: /\.json$/, loader: 'json'},
             {test: /\.(png|jpg)$/, loader: 'url?limit=25000'},
             {test: /\.html$/, exclude: /node_modules/, loader: 'html!html-minify'},

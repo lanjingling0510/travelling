@@ -1,19 +1,27 @@
-
-import 'babel-core/polyfill';
 require('./lib/ionic/js/ionic-angular.min.js');
 require('./lib/ngCordova/dist/ng-cordova.js');
+require('core-js/es6/promise');
 require('./app.css');
 require('../common/service.js');
 
 require('../register/register.js');
 require('../login/login.js');
+
 require('../tab/tab.js');
 require('../home/home.js');
+require('../share/list/share_list.js');
+require('../share/detail/share_detail.js');
+require('../reply/create/reply_create.js');
+require('../user/list/user_list.js');
+require('../user/detail/user_detail.js');
+require('../user/search/user_search.js');
+require('../user/edit/user_edit.js');
 
 require('../add_label/add_label.js');
 require('../add_text/add_text.js');
 require('../add_pos/add_pos.js');
 require('../add_img/add_img.js');
+
 
 require('../account/account.js');
 
@@ -27,6 +35,13 @@ module.export = angular.module('travelling', [
     'travelling.register',
     'travelling.login',
     'travelling.tab',
+    'travelling.user.list',
+    'travelling.user.edit',
+    'travelling.user.search',
+    'travelling.user.detail',
+    'travelling.share.list',
+    'travelling.share.detail',
+    'travelling.reply.create',
     'travelling.home',
     'travelling.add.label',
     'travelling.add.text',
@@ -34,7 +49,28 @@ module.export = angular.module('travelling', [
     'travelling.add.img',
     'travelling.account',
 ]).config(moduleConfig)
-    .run(ModuleRun);
+    .run(ModuleRun)
+    .filter('convertDate', function (ConvertDateService) {
+        return timeStamp => ConvertDateService(timeStamp);
+    })
+    .filter('convertSCore', function () {
+        return value => {
+            let score = value;
+            let scoreTemplate = '';
+
+            for (let i = 5; i--;) {
+                if (score - 20 >= 0) {
+                    scoreTemplate += '<i class="icon energized ion-ios-star padding-right"></i>';
+                } else {
+                    scoreTemplate += '<i class="icon energized ion-ios-star-outline padding-right"></i>';
+                }
+
+                score -= 20;
+            }
+
+            return scoreTemplate;
+        };
+    });
 
 
 /* ngInject*/
@@ -55,9 +91,11 @@ function moduleConfig($locationProvider, $urlRouterProvider, $ionicConfigProvide
 
 
 /* ngInject*/
-function ModuleRun($ionicPlatform, $rootScope, store, $state) {
-    //在app准备好后运行
+function ModuleRun($ionicPlatform, $rootScope, store, $state, $ionicHistory) {
+    console.log('App-run...');
+    // 在app准备好后运行,无论在web还是在app
     $ionicPlatform.ready(function () {
+        console.log('App-ready...');
         // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
         // for form inputs)
         if (window.cordova && window.cordova.plugins && window.cordova.plugins.Keyboard) {
@@ -77,16 +115,26 @@ function ModuleRun($ionicPlatform, $rootScope, store, $state) {
                 profile: store.get('auth.profile'),
                 accessToken: store.get('auth.accessToken'),
             };
-            return null;
         }
     }
 
+    $rootScope.$on('$stateChangeError',
+        function (event, toState, toParams, fromState, fromParams, error) {
+            $state.go('login');
+        });
+
     $rootScope.logout = logout;
+    $rootScope.goBack = goBack;
 
     function logout() {
         delete $rootScope.auth;
         store.remove('auth.profile');
         store.remove('auth.accessToken');
         $state.go('login');
+    }
+
+    //  返回上一个历史视图
+    function goBack() {
+        $ionicHistory.goBack();
     }
 }

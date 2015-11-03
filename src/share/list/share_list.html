@@ -1,0 +1,26 @@
+<ion-view title="{{vm.title}}">
+
+    <!-- 页面头部-->
+    <ion-nav-bar class="bar-positive">
+        <ion-nav-buttons side="left">
+            <button class="button icon-left ion-ios-arrow-back button-icon" ng-click="goBack()">返回</button>
+        </ion-nav-buttons>
+    </ion-nav-bar>
+
+    <!-- 页面内容-->
+    <ion-content>
+        <ion-refresher
+                pulling-text="Pull to refresh..."
+                on-refresh="vm.doRefresh()">
+        </ion-refresher>
+
+        <div class="list">
+            <a ng-repeat="share in vm.shares track by share._id" class="item item-text-wrap item-thumbnail-left" ui-sref="share-detail({_id: share._id})">
+                <img ng-src="{{share.images[0]}}">
+                <h2>{{share.place}}</h2>
+                <p>{{share.text}}</p>
+                <span class="assertive" ng-bind-html="share.score |  convertSCore"></span>
+            </a>
+        </div>
+    </ion-content>
+</ion-view>

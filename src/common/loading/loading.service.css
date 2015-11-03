@@ -1,0 +1,136 @@
+/*--loading....*/
+.loading-wrap {
+    position: fixed;
+    z-index: 999;
+    height: 100%;
+    width: 100%;
+}
+.loading-col {
+    position: absolute;
+    width: 1px;
+    left: 50%;
+    top: 0;
+    height: 100%;
+    background: #00a638;
+}
+.loading-row {
+    position: absolute;
+    left: 0;
+    top: 50%;
+    height: 1px;
+    width: 100%;
+    background: #00a638;
+}
+
+
+
+.loading-box {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    z-index: 1;
+    width: 25em;
+    height: 25em;
+    border-radius: 50%;
+    background: repeating-radial-gradient(#00a638 4%,rgba(51, 205, 95, 0.45) 5%,rgba(51, 205, 95, 0.45) 26%);
+}
+
+
+
+.loading-dot span {
+    position: absolute;
+    top:20px;
+    left: 20px;
+    width: 7px;
+    height: 7px;
+    border-radius:50%;
+    box-shadow:0 0 5px 3px #00FF56;
+    opacity: 0;
+    background: #C3FFD3;
+}
+
+.loading-dot .dot1 {
+    top: 75px;
+    left: 75px;
+    animation: ani-loading-flash 4s linear infinite 3.5s;
+}
+.loading-dot .dot2 {
+    top: 150px;
+    left: 250px;
+    animation: ani-loading-flash 4s linear infinite 1s;
+}
+.loading-dot .dot3 {
+    top: 250px;
+    left: 250px;
+    animation: ani-loading-flash 4s linear infinite 1.5s;
+}
+.loading-dot .dot4 {
+    top: 60px;
+    left: 230px;
+    animation: ani-loading-flash 4s linear infinite 0.5s;
+}
+
+
+.loading-scan {
+    overflow: hidden;
+    width: 25em;
+    height: 25em;
+    border-radius: 50%;
+    -webkit-mask-image: -webkit-radial-gradient(circle, white, black);
+}
+
+.loading-scan:after {
+    content: '';
+    display: block;
+    width: 12.5em;
+    height: 12.5em;
+    transform-origin: 100% 100%;
+    animation: ani-loading 4s linear infinite;
+    border-right: 1px solid rgba(0, 166, 56, 0.75);
+    background: linear-gradient(0deg,rgba(115, 255, 162, 0.0),rgba(0, 166, 56, 0.75));
+    box-sizing: content-box;
+}
+
+
+
+.loading-star img {
+    position: absolute;
+    animation: ani-loading-star 3s linear infinite both;
+    z-index: 2;
+}
+
+
+
+@keyframes ani-loading {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+@keyframes ani-loading-star {
+    0%,70% {
+        transform: scale(0) rotate(0deg);
+    }
+    85% {
+        transform: scale(4) rotate(45deg);
+    }
+    100% {
+        transform: scale(0) rotate(0deg);
+    }
+}
+@keyframes ani-loading-flash {
+    0% {
+        opacity:0;
+    }
+    10% {
+        opacity:1;
+    }
+    30% {
+        opacity:0;
+    }
+}

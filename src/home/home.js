@@ -21,7 +21,7 @@ function moduleConfig($stateProvider) {
 }
 
 /* @ngInject */
-function HomeController($cordovaGeolocation, AlertService, Restangular, $timeout, $ionicSlideBoxDelegate, $animate, BMapOverlay) {
+function HomeController($scope, $ionicHistory, $cordovaGeolocation, $state, Restangular, $timeout, $ionicSlideBoxDelegate, BMapToolTop, BMapMarker, GoeLoadService) {
     const vm = this;
     let map;
     let timer;
@@ -31,10 +31,10 @@ function HomeController($cordovaGeolocation, AlertService, Restangular, $timeout
     const Shares = Restangular.all('share');
     const Labels = Restangular.all('label');
 
-    vm.getShareList = getShareList;
+    vm.getShareListAndShowToolTop = getShareListAndShowToolTop;
     vm.slideChange = clickMarker;
     vm.getLocation = getLocation;
-
+    vm.shareList = [];
     vm.query = {
         page: 0,
         limit: 10,
@@ -45,7 +45,7 @@ function HomeController($cordovaGeolocation, AlertService, Restangular, $timeout
 
     vm.config = {
         watchPosition: false,
-        nowIcon: null,
+        iconUrl: null,
         sw: null,
         ne: null,
         activeMarker: null,
@@ -55,18 +55,22 @@ function HomeController($cordovaGeolocation, AlertService, Restangular, $timeout
     initMap();
 
 
+    //$scope.$on('$ionicView.enter', function () {
+    //    if ($ionicHistory.viewHistory().backView) {
+    //        getShareListAndShowToolTop();
+    //    }
+    //});
+
+
     // 初始化标签
     function initLabels() {
         Labels.getList().then(list => {
             vm.labelsList = [{name: '全部', _id: null}, ...list];
             vm.labelsList.forEach((value, index) => {
-                value.icon = new BMap.Icon(`./images/nav_${index}.png`, new BMap.Size(20, 26), {
-                    anchor: new BMap.Size(10, 26),
-                    imageSize: new BMap.Size(20, 26),
-                });
+                value.iconUrl = `/images/nav_${index}.png`;
             });
 
-            vm.config.nowIcon = vm.labelsList[0].icon;
+            vm.config.iconUrl = vm.labelsList[0].iconUrl;
         });
     }
 
@@ -74,7 +78,7 @@ function HomeController($cordovaGeolocation, AlertService, Restangular, $timeout
     //  初始化地图
     function initMap() {
         // 创建Map实例
-        map = new BMap.Map('home-map');
+        map = new BMap.Map('home-map', {enableMapClick: false});
 
         // 添加控件和比例尺
         const top_right_navigation = new BMap.NavigationControl({
@@ -96,8 +100,10 @@ function HomeController($cordovaGeolocation, AlertService, Restangular, $timeout
 
 
         //  获得位置坐标，添加导航图标
+        GoeLoadService.retain();
         $cordovaGeolocation.getCurrentPosition({enableHighAccuracy: false})
             .then(point => {
+                GoeLoadService.release();
                 map.addOverlay(arrowMarker = new BMap.Marker(point, {icon: arrIcon}));
                 vm.query.center = [point.lng, point.lat].join(',');
                 map.centerAndZoom(point, 18);
@@ -126,17 +132,21 @@ function HomeController($cordovaGeolocation, AlertService, Restangular, $timeout
 
     //  定位
     function getLocation() {
+        GoeLoadService.retain();
         $cordovaGeolocation.getCurrentPosition({enableHighAccuracy: false})
             .then(point => {
+                GoeLoadService.release();
                 map.panTo(point);
                 vm.query.center = [point.lng, point.lat].join(',');
                 arrowMarker.setPosition(point);
                 getShareList().then(list => {
                     list.forEach(value => {
-                        const point = new BMap.Point(value.coordinates[0], value.coordinates[1]);
-                        addMarker(point, value).then((marker) => {
-                            marker.div.addClass('ani-marker-big');
+                        const pt = new BMap.Point(value.coordinates[0], value.coordinates[1]);
+                        addMarker(pt, value).then((marker) => {
+                            marker._div.classList.add('ani-marker-big');
                             vm.config.activeMarker = marker;
+                        }).catch((data) => {
+                            console.log(data);
                         });
                     });
                 });
@@ -145,15 +155,17 @@ function HomeController($cordovaGeolocation, AlertService, Restangular, $timeout
 
 
     //  获得分享列表然后继续添加marker，toolTop
-    function getShareListAndShowToolTop() {
-        getShareList().then(list => {
+    function getShareListAndShowToolTop({orderBy = vm.query.orderBy, iconUrl = vm.config.iconUrl} = {}) {
+        getShareList(orderBy, iconUrl).then(list => {
             list.forEach(value => {
                 const point = new BMap.Point(value.coordinates[0], value.coordinates[1]);
                 addMarker(point, value).then((marker) => {
                     map.panTo(marker.activePoint);
                     marker.toolTop.show();
-                    marker.div.addClass('ani-marker-big');
+                    marker._div.classList.add('ani-marker-big');
                     vm.config.activeMarker = marker;
+                }).catch((data) => {
+                    console.log(data);
                 });
             });
         });
@@ -161,8 +173,8 @@ function HomeController($cordovaGeolocation, AlertService, Restangular, $timeout
 
 
     //  获得分享列表
-    function getShareList({orderBy = vm.query.orderBy, icon = vm.config.nowIcon} = {}) {
-        vm.config.nowIcon = icon;
+    function getShareList(orderBy = vm.query.orderBy, iconUrl = vm.config.iconUrl) {
+        vm.config.iconUrl = iconUrl;
 
         //  清除marker浮标 & 清除提示框
         markerList.forEach(value => {
@@ -205,51 +217,51 @@ function HomeController($cordovaGeolocation, AlertService, Restangular, $timeout
 
     //  添加marker浮标
     function addMarker(point, share) {
-        const icon = vm.config.nowIcon;
-        const marker = new BMap.Marker(point, {icon: icon});
+        const iconUrl = vm.config.iconUrl;
         let activePoint;
-        let markerDiv;
+
+        const marker = new BMapMarker({
+            point: point,
+            iconUrl: iconUrl,
+        });
 
         //  为marker绑定share信息和toolTop
         addToolTop(marker, share);
-
         map.addOverlay(marker);
-        marker.div = markerDiv = angular.element(marker.oc);
+
         activePoint = new BMap.Point(point.lng, (vm.config.ne.lat - vm.config.sw.lat) / 3 + point.lat);
         marker.activePoint = activePoint;
 
         //  点击marker浮标添加动画类
-        marker.addEventListener('click', function () {
+        marker._div.addEventListener('touchstart', function () {
             const index = markerList.findIndex(value => value === marker);
             clickMarker(index);
         }, false);
 
         //  return promise
-        return new Promise((resolve) => {
-            //  为marker添加动画类
-            $animate.addClass(markerDiv, 'ani-marker')
-                .then(() => {
-                    markerDiv.removeClass('ani-marker');
-                    markerList.push(marker);
-                    if (markerList.length === 1) {
-                        resolve(marker);
-                    }
-                });
+        return marker.enterFinish.then(() => {
+            markerList.push(marker);
+            if (markerList.length === 1) {
+                return marker;
+            } else {
+                return Promise.reject('not first marker');
+            }
         });
     }
 
 
     //  添加提示框
     function addToolTop(marker, share) {
-        const toolTop = new BMapOverlay({
+        const toolTop = new BMapToolTop({
             point: marker.getPosition(),
-            width: 300,
-            height: 94,
             data: share,
         });
         marker.toolTop = toolTop;
         map.addOverlay(toolTop);
         toolTop.hide();
+        toolTop._div.addEventListener('touchstart', function () {
+            $state.go('share-detail', {_id: toolTop._data._id});
+        });
     }
 
 
@@ -270,9 +282,8 @@ function HomeController($cordovaGeolocation, AlertService, Restangular, $timeout
         marker.toolTop.toggle();
 
         //  marker放大动画
-        const obj = marker.oc;
-        activeMarker.oc.classList.remove('ani-marker-big');
-        obj.classList.add('ani-marker-big');
+        activeMarker._div.classList.remove('ani-marker-big');
+        marker._div.classList.add('ani-marker-big');
 
         vm.config.activeMarker = marker;
     }

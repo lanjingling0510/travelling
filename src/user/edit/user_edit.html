@@ -1,0 +1,76 @@
+<ion-view view-title="个人资料">
+
+    <ion-nav-bar class="bar-positive">
+        <ion-nav-buttons side="left">
+            <button class="button icon-left ion-ios-arrow-back button-icon" ng-click="goBack()">返回</button>
+        </ion-nav-buttons>
+    </ion-nav-bar>
+
+    <!-- 页面内容-->
+    <ion-content>
+        <ul class="list">
+            <li class="item item-avatar-right item-icon-right"
+                ngf-select ng-model="vm.pictureFile"
+                name="file"
+                ngf-change="vm.editAvatar($file)"
+                ngf-pattern="'image/*'"
+                ngf-multiple='false'
+                ngf-resize="{width: 100, height: 100}"
+                accept="image/*"
+                ngf-max-size="3MB">
+                <img ng-src="{{vm.user.avatar}}" style="right: 42px;">
+                <i class="icon ion-ios-arrow-right text-gray"></i>
+
+                头像
+            </li>
+            <li class="item">
+                账户 <span class="item-note">{{::vm.user.username}}</span>
+            </li>
+            <a class="item item item-icon-right" ng-click="vm.nicknameModal.show()">
+                昵称 <span class="item-note">{{vm.user.nickname}}</span>
+                <i class="icon ion-ios-arrow-right text-gray"></i>
+            </a>
+            <a class="item item item-icon-right" ng-click="vm.passwordModal.show()">
+                修改密码
+                <i class="icon ion-ios-arrow-right text-gray"></i>
+            </a>
+        </ul>
+    </ion-content>
+
+</ion-view>
+
+<!-- 修改昵称视图 -->
+<script id="user_edit_nickname_modal.html" type="text/ng-template">
+    <ion-modal-view>
+        <ion-header-bar class="bar-positive">
+            <button class="button icon-left ion-ios-arrow-back button-icon" ng-click="vm.nicknameModal.hide()">返回</button>
+            <h1 class="title">修改昵称</h1>
+            <button class="button button-clear" ng-click="vm.editNickname(vm.user.nickname)">保存</button>
+        </ion-header-bar>
+        <ion-content class="stable-bg" scroll="false">
+            <div class="list list-inset list-borderless">
+                <label class="item item-input">
+                    <input type="text" ng-model="vm.user.nickname">
+                </label>
+            </div>
+        </ion-content>
+    </ion-modal-view>
+</script>
+
+<!-- 修改密码视图 -->
+<script id="user_edit_password_modal.html" type="text/ng-template">
+    <ion-modal-view>
+        <ion-header-bar  class="bar-positive">
+            <button class="button icon-left ion-ios-arrow-back button-icon" ng-click="vm.passwordModal.hide()">返回</button>
+            <h1 class="title">修改密码</h1>
+            <button class="button button-clear" ng-click="vm.editPassword(vm.user.password)">保存</button>
+        </ion-header-bar>
+        <ion-content class="stable-bg" scroll="false">
+            <div class="list list-inset list-borderless">
+                <label class="item item-input">
+                    <input type="password" ng-model="vm.user.password" placeholder="新密码">
+                </label>
+            </div>
+        </ion-content>
+    </ion-modal-view>
+</script>

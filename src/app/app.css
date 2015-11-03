@@ -1,32 +1,64 @@
-
 @import './lib/ionic/css/ionic.css';
 
-.map{
-    height:100%;
+/*unitlity*/
+.pull-right {
+    float: right;
 }
 
-#home-map.map{
-    height:70%;
+a {
+    text-decoration: none;
 }
 
-.map .anchorBL{
-    display:none;
+.text-gray {
+    color: #aaa !important;
 }
 
-.item-radio .radio-icon{
+.loading-container .loading {
+    background-color: transparent;
+}
+
+.loading-container .loading .wenzi {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    font-size: 21px;
+    width: 200px;
+    margin-left: -100px;
+    margin-top: -0.5em;
+}
+
+.spinner svg {
+    width: 200px;
+    height: 200px;
+    stroke: #FFF;
+    fill: #FFF;
+}
+
+.hide {
+    display: none !important;
+    opacity: 0;
+}
+/*map*/
+.map {
+    height: 100%;
+}
+
+.map .anchorBL {
+    display: none;
+}
+
+.item-radio .radio-icon {
     color: #00ff1d;
 }
 
-
 /*dropdown style*/
-.nav-dropdown-wrap{
-    position:absolute;
-    left:0;
-    width:100%;
+.nav-dropdown-wrap {
+    position: absolute;
+    left: 0;
+    width: 100%;
 }
 
-
-/*toolTop style*/
+/*toolTopOverlay style*/
 @keyframes ani-tooltip-enter {
     from {
         transform: translate3d(0, -50px, 0);
@@ -35,37 +67,78 @@
 }
 
 .tooltip {
-    border-radius:3px;
-    position:absolute;
-    box-shadow:1px 1px 10px 0 #ccc;
-    background:#fff;
+    border-radius: 3px;
+    position: absolute;
+    box-shadow: 1px 1px 10px 0 #ccc;
+    background: #fff;
     animation: ani-tooltip-enter ease-out 0.6s 0.4s both;
 }
 
 .tooltip .arrow {
-    position:absolute;
+    position: absolute;
     width: 0;
     height: 0;
     border-left: 15px solid transparent;
     border-right: 15px solid transparent;
     border-top: 15px solid #fff;
     bottom: -15px;
-    left: calc(50% - 10px);
-
+    left: 50%;
+    margin-left: -10px;
 }
 
-.tooltip-col-lf{
-    float:left;
-    width:50%;
+.tooltip-col-lf {
+    float: left;
+    width: 50%;
     line-height: 0;
+    overflow: hidden;
+    height: 100%;
 }
 
-.tooltip-col-rt{
-    float:left;
-    width:50%;
-    padding:1em;
+.tooltip-col-rt {
+    float: left;
+    width: 50%;
+    padding: 1em;
 }
-.tooltip-title{
+
+.tooltip-title {
+    margin: 0;
     font: normal 16px/24px '微软雅黑';
 }
 
+/*markerOverlay style*/
+.marker-overlay {
+    border-radius: 3px;
+    position: absolute;
+    width: 20px;
+    height: 26px;
+    animation: ani-marker-enter 0.4s ease-in-out both;
+}
+
+.ani-marker-big {
+    transform-origin: 9px 23px;
+    animation: ani-marker-big 0.4s linear both;
+}
+
+@keyframes ani-marker-enter {
+    from {
+        transform: scale(0.1);
+    }
+}
+
+@keyframes ani-marker-big {
+    to {
+        transform: scale(2);
+    }
+}
+
+/*share card style*/
+.card-share-tabs {
+    background-color: #fff !important;
+}
+
+.card-share-tabs .card-share-tab {
+    color: rgb(67, 156, 216) !important;
+    font-size: 13px !important;
+    opacity: 1 !important;
+    background: #fff !important;
+}

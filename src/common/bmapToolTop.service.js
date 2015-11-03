@@ -1,13 +1,13 @@
 angular.module('travelling.common.services')
-    .factory('BMapOverlay', BMapOverlayService);
+    .factory('BMapToolTop', BMapToolTopService);
 
 /* @ngInject*/
-function BMapOverlayService() {
+function BMapToolTopService() {
     // 定义自定义覆盖物的构造函数
-    function ToolTopOverlay({point, width, height, data}) {
+    function ToolTopOverlay({point, data}) {
         this._center = point;
-        this._width = width;
-        this._height = height;
+        this._width = 300;
+        this._height = 94;
         this._data = data;
     }
 
@@ -20,6 +20,18 @@ function BMapOverlayService() {
     ToolTopOverlay.prototype.initialize = function (map) {
         this._map = map;
         const share = this._data;
+        let scoreTemplate = '';
+        let score = share.score;
+
+        for (let i = 5; i--;) {
+            if (score - 20 > 0) {
+                scoreTemplate += '<i class="icon energized ion-ios-star padding-right"></i>';
+            } else {
+                scoreTemplate += '<i class="icon energized ion-ios-star-outline padding-right"></i>';
+            }
+            score -= 20;
+        }
+
         const divTemplate = `
             <div class="tooltip">
                 <div class="tooltip-col-lf">
@@ -29,10 +41,14 @@ function BMapOverlayService() {
                     <h1 class="tooltip-title">
                         ${share.place}
                     </h1>
+                    <div class="row tooltip-score">
+                        ${scoreTemplate}
+                    </div>
                 </div>
                 <div class="arrow"></div>
             </div>
         `;
+
 
         let div = document.createElement('div');
         div.innerHTML = divTemplate;
