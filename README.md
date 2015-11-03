@@ -1,3 +1,4 @@
+
 # A webApp from ionic —— Travelling
 
 
@@ -15,3 +16,4 @@ $ionicHistory.viewHistory().backView
 ngf-resize="{width: 500, height: 300, quality: .8}" can't run on mobile browser
 
 because of Blob unsupporsted to qq web Browser, and blobBuilder.append() can't fill arraybuffer in .
+

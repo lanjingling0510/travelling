@@ -1,0 +1,73 @@
+<ion-view view-title="分享详情">
+    <ion-nav-bar  class="bar-positive">
+        <ion-nav-buttons side="left">
+            <a class="button button-clear" href="#/menu/my-share">
+                <i class="icon ion-ios-arrow-back"></i>返回
+            </a>
+        </ion-nav-buttons>
+    </ion-nav-bar>
+    <ion-content class="stable-bg">
+        <!--下拉刷新滚动视图-->
+        <ion-refresher
+                pulling-text="下拉刷新..."
+                on-refresh="doRefresh()">
+        </ion-refresher>
+
+        <!--分享-->
+
+        <ul class="list">
+            <li class="item item-icon-left item-borderless" style=" color: rgb(255, 148, 26);">
+                <i class="icon ion-ios-location assertive"></i>
+                {{share.share_place}}
+                <span class="assertive item-note" style="font-size:20px">{{share.share_score/(share.share_replycount*1||1)|number:0}}分</span>
+            </li>
+            <li class="item item-text-wrap item-borderless">
+                {{share.share_text}}
+            </li>
+            <li class="item item-image" ng-repeat="img in share.share_imgs|convertImgStr">
+                <img ng-src="{{img}}" alt=""/>
+            </li>
+            <li class="item item-avatar-left item-icon-right">
+                <img src="img/5.jpg" alt=""/>
+                <h2> 来自 <span class="assertive">{{share.user_name}}</span></h2>
+                <p>{{share.share_date|convertDate}}</p>
+                <i ng-click="openSetting()" class="icon ion-chatbox-working"></i>
+            </li>
+        </ul>
+        <!--评价-->
+        <ion-list>
+            <ion-item ng-repeat="item in replyList">
+                <ul class="list  list-borderless">
+                    <li class="item item-avatar-left item-icon-right">
+                        <img src="img/5.jpg" alt=""/>
+                        <h2 class="assertive">{{item.user_name}}</h2>
+                        <p>{{item.reply_date|convertDate}}</p>
+                        <div class="icon" style="flex-direction: column;justify-content: center">
+                            <span style="font-size:32px" class="assertive">{{item.reply_score}}</span>
+                            <span style="font-size:12px" class="positive">评分</span>
+                        </div>
+                    </li>
+
+                    <li class="item item-text-wrap">
+                        <p>
+                            {{item.reply_text}}
+                        </p>
+                    </li>
+
+                    <li class="row row-wrap">
+                        <a class="col col-33" ng-repeat="img in item.reply_imgs|convertImgStr">
+                            <img ng-src="{{img}}" alt=""/>
+                        </a>
+                    </li>
+
+                    <li class="item item-icon-right" style="padding:0">
+                        <span class="button-positive button button-clear" style="font-size:24px">{{$index+1}}F</span>
+                        <i class="icon" ng-class="{'ion-android-happy balanced':item.reply_support*1,'ion-android-sad assertive':!(item.reply_support*1)}"></i>
+                    </li>
+                </ul>
+            </ion-item>
+        </ion-list>
+
+
+    </ion-content>
+</ion-view>

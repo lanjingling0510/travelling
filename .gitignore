@@ -1,9 +1,9 @@
-node_modules/
-platforms/
-plugins/
+
+platforms
+plugins
+*.sql
 node_modules
 *.log
-public/plugin
 upload
 config.json
 pm2.json

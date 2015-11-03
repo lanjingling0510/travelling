@@ -1,0 +1,109 @@
+/* Empty. Add your own CSS if you like */
+html,body{
+    height:100%;
+    font-family: "Segoe UI","Lucida Grande",Helvetica,Arial,"Microsoft YaHei",FreeSans,Arimo,"Droid Sans","wenquanyi micro hei","Hiragino Sans GB","Hiragino Sans GB W3",FontAwesome,sans-serif;
+}
+img{
+    width:100%;
+}
+a{
+    text-decoration: none;
+    color: inherit;
+}
+textarea.ng-invalid.ng-invalid-required{
+    border:1px dotted red;
+}
+
+.map{
+    height:100%;
+}
+.map .anchorBL{
+    display:none;
+}
+
+.item-radio .radio-icon{
+    color: #00ff1d;
+}
+.my-avatar-wrap {
+    width: 70px;
+    height: 70px;
+    margin: 46px auto 0;
+    border: 3px solid #fff;
+    border-radius: 50%;
+}
+.my-avatar{
+    border-radius: 50%;
+}
+
+
+.menu-side-bg {
+    background: url('../img/cup.png') no-repeat;
+    background-size: cover;
+}
+.menu-side-list .item{
+    background:transparent;
+    color:#fff;
+}
+
+
+
+/*图片上传样式*/
+.pic-wrap {
+    position: relative;
+    width: 100%;
+    padding-bottom: 100%;
+}
+
+.pic-content {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+.pic-delete-btn{
+    position:absolute;
+    right: -7px;
+    top: -7px;
+    width:30px;
+    height:30px;
+    background:url('../img/close.png');
+    background-size:30px 30px;
+    z-index: 1;
+    display:block;
+}
+
+.pic-progress-wrap{
+    position: absolute;
+    top: 50%;
+    left: 0;
+    height: 8px;
+    width: 100%;
+    padding:1px;
+    z-index: 1;
+    background-color:#fff;
+    display:none;
+}
+.pic-progress{
+    background-image: linear-gradient(to bottom, #9EFF10 0%, #38CD38 50%,#9EFF10 100%);
+    background-image: -webkit-linear-gradient(top, #9EFF10 0%, #38CD38 50%,#9EFF10 100%);
+    height:6px;
+    display:block;
+    width:0;
+}
+
+.ani_shake{
+    -webkit-animation:ani-shake 0.2s linear infinite;
+}
+@-webkit-keyframes ani-shake {
+    0%,50%,100%{
+        -webkit-transform:rotate(0deg)
+    }25%{
+         -webkit-transform: rotate(-5deg);
+     }75%{
+          -webkit-transform: rotate(5deg);
+      }
+}
