@@ -39,7 +39,10 @@ function AddImgController($rootScope, $state, AlertService, store, UploadFile, A
 
 
     function addImageByWeb(file) {
-        if (!file) return false;
+        if (!file) {
+            AlertService.warning('上传有点问题哦~');
+            return;
+        }
 
         $ionicLoading.show({
             template: '<ion-spinner icon="ripple"></ion-spinner><span class="wenzi">上传中...</span>',

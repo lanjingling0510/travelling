@@ -35,6 +35,8 @@ function replyCreateController(Restangular, $stateParams, AlertService, $rootSco
         if (/^.{6,}$/.test(reply.text)) {
             Reply.post('reply', reply)
                 .then(() => {
+                    vm.reply.score = 0;
+                    vm.reply.text = '';
                     AlertService.success('评价成功！');
                 }).catch(e => {
                     AlertService.warning(e.data);

@@ -1,5 +1,4 @@
-module.exports = angular.module('travelling.login', [
-])
+module.exports = angular.module('travelling.login', [])
     .config(moduleConfig)
     .controller('loginController', loginController);
 
@@ -18,11 +17,21 @@ function moduleConfig($stateProvider) {
 }
 
 /* @ngInject */
-function loginController($rootScope, store, AlertService, $state, Restangular) {
+function loginController($scope, $rootScope, store, AlertService, $state, Restangular, $ionicHistory) {
     const vm = this;
-    vm.login = login;
     const auth = Restangular.all('auth');
-    initController();
+    vm.login = login;
+    vm.user = {
+        username: '',
+        password: '',
+    };
+
+    $scope.$on('$ionicView.enter', function () {
+        $ionicHistory.clearHistory();
+        $ionicHistory.clearCache();
+        initController();
+    });
+
 
     function login(user) {
         auth.one('token').doPOST(user).then(function (res) {
@@ -44,10 +53,5 @@ function loginController($rootScope, store, AlertService, $state, Restangular) {
 
     function initController() {
         $rootScope.logout();
-
-        vm.user = {
-            username: '',
-            password: '',
-        };
     }
 }

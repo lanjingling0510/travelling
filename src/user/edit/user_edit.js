@@ -31,12 +31,11 @@ function UserEditController(Restangular, profile, AlertService, UploadAvatar, $i
 
     initController();
 
-
     function editAvatar(file) {
-        console.log('change');
-
-
-        if (!file) return false;
+        if (!file) {
+            AlertService.warning('上传有点问题哦~');
+            return;
+        }
 
         $ionicLoading.show({
             template: '<ion-spinner icon="ripple"></ion-spinner><span class="wenzi">上传中...</span>',
