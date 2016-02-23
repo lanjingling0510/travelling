@@ -95,6 +95,7 @@ function AddImageByApp($ionicActionSheet, $cordovaCamera, $cordovaImagePicker, $
 /* @ngInject*/
 function UploadFile($rootScope, Upload, Restangular, $q) {
     return function ({ file, url = 'http://apis.cyt-rain.cn/file-warehouse/travelling/share/', method = 'POST'}) {
+        var imgUrl = url + Date.now();
         if (isQQBrowser()) {
             const defered = $q.defer();
             const Upload = Restangular.all('upload');
@@ -109,7 +110,7 @@ function UploadFile($rootScope, Upload, Restangular, $q) {
             return defered.promise;
         } else {
             const upload = Upload.upload({
-                url: url + new Date().getTime(),
+                url: imgUrl,
                 data: {
                     single: file,
                 },
@@ -117,7 +118,7 @@ function UploadFile($rootScope, Upload, Restangular, $q) {
                 headers: {'Authorization': 'Bearer ' + $rootScope.auth.accessToken},
                 sendFieldsAs: 'json',
             });
-            return upload;
+            return imgUrl;
         }
     };
 }
@@ -125,6 +126,7 @@ function UploadFile($rootScope, Upload, Restangular, $q) {
 /* @ngInject*/
 function UploadAvatar($rootScope, Upload, Restangular, $q) {
     return function ({ file, url = 'http://apis.cyt-rain.cn/file-warehouse/travelling/avatar/', method = 'POST'}) {
+        var imgUrl = url + Date.now();
         if (isQQBrowser()) {
             const defered = $q.defer();
             const Upload = Restangular.all('upload');
@@ -143,7 +145,7 @@ function UploadAvatar($rootScope, Upload, Restangular, $q) {
             return defered.promise;
         } else {
             const upload = Upload.upload({
-                url: url,
+                url: imgUrl,
                 data: {
                     single: file,
                 },
@@ -151,7 +153,7 @@ function UploadAvatar($rootScope, Upload, Restangular, $q) {
                 headers: {'Authorization': 'Bearer ' + $rootScope.auth.accessToken},
                 sendFieldsAs: 'json',
             });
-            return upload;
+            return imgUrl;
         }
     };
 }
