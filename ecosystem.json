@@ -19,7 +19,7 @@
             "user": "nodejs",
             "host": "www.cyt-rain.cn",
             "ref": "origin/master",
-            "repo": "https://github.com/lanjingling0510/travelling.git",
+            "repo": "git@github.com:lanjingling0510/travelling.git",
             "path": "/var/nodejs/travelling/fontend",
             "post-deploy": "npm install ; npm run build"
         }
