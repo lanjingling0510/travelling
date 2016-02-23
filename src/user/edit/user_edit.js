@@ -33,9 +33,6 @@ function UserEditController(Restangular, profile, AlertService, UploadAvatar, $i
 
 
     function editAvatar(file) {
-        console.log('change');
-
-
         if (!file) return false;
 
         $ionicLoading.show({
@@ -45,7 +42,6 @@ function UserEditController(Restangular, profile, AlertService, UploadAvatar, $i
 
         UploadAvatar({ // eslint-disable-line new-cap
             file: file,
-            oldAvatar: vm.user.avatar,
         }).then(result => {
             vm.user.avatar = result.data;
             User.doPUT({avatar: vm.user.avatar});

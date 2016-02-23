@@ -94,7 +94,7 @@ function AddImageByApp($ionicActionSheet, $cordovaCamera, $cordovaImagePicker, $
 
 /* @ngInject*/
 function UploadFile($rootScope, Upload, Restangular, $q) {
-    return function ({ file, url = '/apis/upload/temp', method = 'POST'}) {
+    return function ({ file, url = 'http://apis.cyt-rain.cn/file-warehouse/travelling/share/', method = 'POST'}) {
         if (isQQBrowser()) {
             const defered = $q.defer();
             const Upload = Restangular.all('upload');
@@ -109,9 +109,9 @@ function UploadFile($rootScope, Upload, Restangular, $q) {
             return defered.promise;
         } else {
             const upload = Upload.upload({
-                url: url,
+                url: url + new Date().getTime(),
                 data: {
-                    file: file,
+                    single: file,
                 },
                 method: method,
                 headers: {'Authorization': 'Bearer ' + $rootScope.auth.accessToken},
@@ -124,7 +124,7 @@ function UploadFile($rootScope, Upload, Restangular, $q) {
 
 /* @ngInject*/
 function UploadAvatar($rootScope, Upload, Restangular, $q) {
-    return function ({ file, oldAvatar, url = '/apis/upload', method = 'POST'}) {
+    return function ({ file, url = 'http://apis.cyt-rain.cn/file-warehouse/travelling/avatar/', method = 'POST'}) {
         if (isQQBrowser()) {
             const defered = $q.defer();
             const Upload = Restangular.all('upload');
@@ -145,8 +145,7 @@ function UploadAvatar($rootScope, Upload, Restangular, $q) {
             const upload = Upload.upload({
                 url: url,
                 data: {
-                    file: file,
-                    oldAvatar: oldAvatar,
+                    single: file,
                 },
                 method: method,
                 headers: {'Authorization': 'Bearer ' + $rootScope.auth.accessToken},
@@ -161,5 +160,3 @@ function isQQBrowser() {
     const ua = navigator.userAgent.toLowerCase();
     return (/micromessenger|mqqbrowser/.test(ua)) ? true : false;
 }
-
-
