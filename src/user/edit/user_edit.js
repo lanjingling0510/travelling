@@ -21,7 +21,7 @@ function moduleConfig($stateProvider) {
     });
 }
 
-function UserEditController(Restangular, profile, AlertService, UploadAvatar, $ionicModal, $scope, $state, $ionicLoading, Upload) {
+function UserEditController(Restangular, profile, AlertService, UploadFile, $ionicModal, $scope, $state, $ionicLoading) {
     const vm = this;
     const _id = profile._id;
     const User = Restangular.one('user', _id);
@@ -33,9 +33,6 @@ function UserEditController(Restangular, profile, AlertService, UploadAvatar, $i
 
 
     function editAvatar(file) {
-        console.log('change');
-
-
         if (!file) return false;
 
         $ionicLoading.show({
@@ -43,11 +40,10 @@ function UserEditController(Restangular, profile, AlertService, UploadAvatar, $i
             hideOnStageChange: true,
         });
 
-        UploadAvatar({ // eslint-disable-line new-cap
+        UploadFile({ // eslint-disable-line new-cap
             file: file,
-            oldAvatar: vm.user.avatar,
         }).then(result => {
-            vm.user.avatar = result.data;
+            vm.user.avatar = result;
             User.doPUT({avatar: vm.user.avatar});
         }).catch((err) => {
             AlertService.warning(err.data);

@@ -55,11 +55,11 @@ function HomeController($scope, $ionicHistory, $cordovaGeolocation, $state, Rest
     initMap();
 
 
-    //$scope.$on('$ionicView.enter', function () {
+    // $scope.$on('$ionicView.enter', function () {
     //    if ($ionicHistory.viewHistory().backView) {
     //        getShareListAndShowToolTop();
     //    }
-    //});
+    // });
 
 
     // 初始化标签
@@ -243,9 +243,8 @@ function HomeController($scope, $ionicHistory, $cordovaGeolocation, $state, Rest
             markerList.push(marker);
             if (markerList.length === 1) {
                 return marker;
-            } else {
-                return Promise.reject('not first marker');
             }
+            return Promise.reject('not first marker');
         });
     }
 
@@ -288,4 +287,3 @@ function HomeController($scope, $ionicHistory, $cordovaGeolocation, $state, Rest
         vm.config.activeMarker = marker;
     }
 }
-

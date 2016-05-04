@@ -1,7 +1,6 @@
 angular.module('travelling.common.services')
     .factory('AddImageByApp', AddImageByApp)
-    .factory('UploadFile', UploadFile)
-    .factory('UploadAvatar', UploadAvatar);
+    .factory('UploadFile', UploadFileFactory)
 
 
 /* @ngInject*/
@@ -18,14 +17,14 @@ function AddImageByApp($ionicActionSheet, $cordovaCamera, $cordovaImagePicker, $
             },
             buttonClicked: function (index) {
                 switch (index) {
-                    case 0:
-                        updateByCamera(vm);
-                        break;
-                    case 1:
-                        updateByPick(vm);
-                        break;
-                    default:
-                        break;
+                case 0:
+                    updateByCamera(vm);
+                    break;
+                case 1:
+                    updateByPick(vm);
+                    break;
+                default:
+                    break;
                 }
                 return true;
             },
@@ -93,73 +92,37 @@ function AddImageByApp($ionicActionSheet, $cordovaCamera, $cordovaImagePicker, $
 }
 
 /* @ngInject*/
-function UploadFile($rootScope, Upload, Restangular, $q) {
-    return function ({ file, url = '/apis/upload/temp', method = 'POST'}) {
-        if (isQQBrowser()) {
-            const defered = $q.defer();
-            const Upload = Restangular.all('upload');
-            const fileReader = new FileReader();
-            fileReader.onload = function (e) {
-                Upload.doPOST({dataUrl: e.target.result}, 'fromBase64/temp').then(result => {
-                    defered.resolve({data: result});
-                }, (err) => defered.reject(err));
-            };
-
-            fileReader.readAsDataURL(file);
-            return defered.promise;
-        } else {
-            const upload = Upload.upload({
-                url: url,
-                data: {
-                    file: file,
-                },
-                method: method,
-                headers: {'Authorization': 'Bearer ' + $rootScope.auth.accessToken},
-                sendFieldsAs: 'json',
-            });
-            return upload;
-        }
+function UploadFileFactory($rootScope, Upload) {
+    return function ({ file, host = 'http://apis.cyt-rain.cn', method = 'POST'}) {
+        // if (isQQBrowser()) {
+        //     const defered = $q.defer();
+        //     const local_Upload = Restangular.all('upload');
+        //     const fileReader = new FileReader();
+        //     fileReader.onload = function (e) {
+        //         local_Upload.doPOST({dataUrl: e.target.result}, 'fromBase64/temp').then(result => {
+        //             defered.resolve({data: result});
+        //         }, (err) => defered.reject(err));
+        //     };
+        //
+        //     fileReader.readAsDataURL(file);
+        //     return defered.promise;
+        // }
+        const distUrl = `${host}/file-warehouse/travelling/${Date.now()}`;
+        return Upload.upload({
+            url: distUrl,
+            data: {
+                single: file,
+            },
+            method: method,
+            sendFieldsAs: 'json',
+        }).then(() => {
+            return distUrl;
+        });
     };
 }
 
-/* @ngInject*/
-function UploadAvatar($rootScope, Upload, Restangular, $q) {
-    return function ({ file, oldAvatar, url = '/apis/upload', method = 'POST'}) {
-        if (isQQBrowser()) {
-            const defered = $q.defer();
-            const Upload = Restangular.all('upload');
-            const fileReader = new FileReader();
-            fileReader.onload = function (e) {
-                Upload.doPOST({
-                    dataUrl: e.target.result,
-                    oldAvatar: oldAvatar,
-                }, 'fromBase64')
-                    .then(result => {
-                        defered.resolve({data: result});
-                    }, (err) => defered.reject(err));
-            };
 
-            fileReader.readAsDataURL(file);
-            return defered.promise;
-        } else {
-            const upload = Upload.upload({
-                url: url,
-                data: {
-                    file: file,
-                    oldAvatar: oldAvatar,
-                },
-                method: method,
-                headers: {'Authorization': 'Bearer ' + $rootScope.auth.accessToken},
-                sendFieldsAs: 'json',
-            });
-            return upload;
-        }
-    };
-}
-
-function isQQBrowser() {
-    const ua = navigator.userAgent.toLowerCase();
-    return (/micromessenger|mqqbrowser/.test(ua)) ? true : false;
-}
-
-
+// function isQQBrowser() {
+//     const ua = navigator.userAgent.toLowerCase();
+//     return (/micromessenger|mqqbrowser/.test(ua)) ? true : false;
+// }

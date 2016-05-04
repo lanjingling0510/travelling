@@ -49,7 +49,7 @@ function AddImgController($rootScope, $state, AlertService, store, UploadFile, A
         UploadFile({ // eslint-disable-line new-cap
             file: file,
         }).then(result => {
-            vm.images.push(result.data);
+            vm.images.push(result);
         }).catch((err) => {
             AlertService.warning(err.data);
         }).finally(() => {

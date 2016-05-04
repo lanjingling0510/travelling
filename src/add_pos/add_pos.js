@@ -65,12 +65,13 @@ function AddPosController($scope, $ionicLoading, store, $cordovaGeolocation, BMa
 
     //  获得当前位置信息
     function currentPos() {
-        //$ionicLoading.show({
-        //    template: '加载地图...',
-        //});
+        $ionicLoading.show({
+            template: '<ion-spinner icon="ripple"></ion-spinner><span class="wenzi">加载地图...</span>',
+            hideOnStageChange: true,
+        });
 
         $cordovaGeolocation.getCurrentPosition({enableHighAccuracy: false})
-            .then(changePosByPoint)
+            .then(changePosByPoint) // 根据坐标搜索位置信息
             .then((point) => {
                 map.centerAndZoom(point, 18);  // 初始化地图,设置中心点坐标和地图级别
                 $ionicLoading.hide();
@@ -106,7 +107,7 @@ function AddPosController($scope, $ionicLoading, store, $cordovaGeolocation, BMa
                 infoWindow = new BMap.InfoWindow(vm.place);
                 marker.openInfoWindow(infoWindow);
                 vm.coordinates = [point.lng, point.lat];
-                console.log(vm.coordinates);
+                console.log(vm.coordinates[0], vm.coordinates[1]);
                 vm.city = addComp.city;
                 defered.resolve(point);
             });

@@ -3,10 +3,9 @@
   "version": "1.0.0",
   "description": "travelling: An Ionic project",
   "scripts": {
-    "start": "nodemon --harmony -e js,html,css,json index.js",
-    "watch": "./node_modules/.bin/webpack -d --progress --colors --watch",
-    "build": "./node_modules/.bin/webpack -p --progress",
-    "serve": "webpack-dev-server --inline --colors --hot --content-base www --host 192.168.88.115"
+    "deploy": "pm2 deploy ecosystem.json production",
+    "start": "webpack-dev-server",
+    "build": "node_modules/.bin/webpack -p --progress --colors"
   },
   "dependencies": {
     "angular": "^1.4.3",
@@ -46,7 +45,8 @@
     "uglify-loader": "^1.2.0",
     "url-loader": "^0.5.6",
     "webpack": "^1.12.2",
-    "webpack-dev-server": "^1.11.0"
+    "webpack-dev-server": "^1.14.1",
+    "webpack-merge": "^0.12.0"
   },
   "cordovaPlugins": [
     "cordova-plugin-device",
@@ -57,4 +57,3 @@
   ],
   "cordovaPlatforms": []
 }
-

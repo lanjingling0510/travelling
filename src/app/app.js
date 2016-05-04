@@ -84,8 +84,8 @@ function moduleConfig($locationProvider, $urlRouterProvider, $ionicConfigProvide
     $ionicConfigProvider.tabs.style('striped');
     $ionicConfigProvider.tabs.position('bottom');
     $urlRouterProvider.otherwise('/tab/home');
-    $locationProvider.html5Mode(true);
-    RestangularProvider.setBaseUrl('/apis');
+    // $locationProvider.html5Mode(true);
+    RestangularProvider.setBaseUrl('http://www.cyt-rain.cn:3001');
     RestangularProvider.setRestangularFields({id: '_id'});
 }
 
@@ -119,7 +119,7 @@ function ModuleRun($ionicPlatform, $rootScope, store, $state, $ionicHistory) {
     }
 
     $rootScope.$on('$stateChangeError',
-        function (event, toState, toParams, fromState, fromParams, error) {
+        function (event, toState, toParams, fromState, fromParams, error) { // eslint-disable-line
             $state.go('login');
         });
 
