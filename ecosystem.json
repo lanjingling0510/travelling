@@ -1,0 +1,27 @@
+{
+    "apps": [
+        {
+            "name": "travelling",
+            "script": "index.js",
+            "node_args": ["--harmony"],
+            "log_date_format": "YYYY-MM-DD HH:mm Z",
+            "instances": 1,
+            "env": {
+                "COMMON_VARIABLE": "true"
+            },
+            "env_production": {
+                "NODE_ENV": "production"
+            }
+        }
+    ],
+    "deploy": {
+        "production": {
+            "user": "nodejs",
+            "host": "www.cyt-rain.cn",
+            "ref": "origin/master",
+            "repo": "git@github.com:lanjingling0510/travelling.git",
+            "path": "/var/nodejs/travelling/fontend",
+            "post-deploy": "npm install ; npm run build"
+        }
+    }
+}

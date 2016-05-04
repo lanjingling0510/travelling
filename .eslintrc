@@ -9,6 +9,6 @@
       "block-scoped-var": 0,          // http://eslint.org/docs/rules/block-scoped-var
       "camelcase": 0,
       "no-console": 0,
-      "new-cap": 0,
+      "new-cap": 0
     }
 }

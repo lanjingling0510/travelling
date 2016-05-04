@@ -1,6 +1,6 @@
 angular.module('travelling.common.services')
     .factory('AddImageByApp', AddImageByApp)
-    .factory('UploadFile', UploadFileFactory)
+    .factory('UploadFile', UploadFileFactory);
 
 
 /* @ngInject*/
