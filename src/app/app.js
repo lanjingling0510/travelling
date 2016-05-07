@@ -1,9 +1,10 @@
-require('./lib/ionic/js/ionic-angular.min.js');
-require('./lib/ngCordova/dist/ng-cordova.js');
-require('core-js/es6/promise');
 require('./app.css');
+require('./lib/ionic/js/ionic.min.js');
+require('./lib/ionic/js/ionic-angular.min.js');
+// require('./lib/ngCordova/dist/ng-cordova.js');
+require('core-js/es6/promise');
+require('core-js/es6/array');
 require('../common/service.js');
-
 require('../register/register.js');
 require('../login/login.js');
 
@@ -28,7 +29,6 @@ require('../account/account.js');
 
 module.export = angular.module('travelling', [
     'ionic',
-    'ngCordova',
     'angular-storage',
     'restangular',
     'travelling.common.services',
@@ -115,13 +115,15 @@ function ModuleRun($ionicPlatform, $rootScope, store, $state, $ionicHistory) {
                 profile: store.get('auth.profile'),
                 accessToken: store.get('auth.accessToken'),
             };
+        } else {
+            $state.go('login');
         }
     }
 
-    $rootScope.$on('$stateChangeError',
-        function (event, toState, toParams, fromState, fromParams, error) { // eslint-disable-line
-            $state.go('login');
-        });
+    $rootScope.$on('$stateChangeError', function (event, toState, toParams, fromState, fromParams, error) { // eslint-disable-line
+        $state.go('login');
+    });
+
 
     $rootScope.logout = logout;
     $rootScope.goBack = goBack;

@@ -52,10 +52,13 @@ function subDropDown() {
         },
         require: '^dropDown',
         transclude: true,
-        template: '<div ng-transclude ng-show="select" class="list"></div>',
+        template: '<div ng-click="closeSubDropDown()" ng-transclude ng-show="select" class="list"></div>',
         link: function (scope, ele, attr, ctrl) {
             scope.select = false;
             ctrl.addScope(scope);
+            scope.closeSubDropDown = function () {
+                scope.select = false;
+            };
         },
     };
 }

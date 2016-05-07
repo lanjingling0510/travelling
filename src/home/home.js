@@ -35,17 +35,22 @@ function HomeController($scope, $ionicHistory, $cordovaGeolocation, $state, Rest
     vm.slideChange = clickMarker;
     vm.getLocation = getLocation;
     vm.shareList = [];
+    vm.orderByList = [
+        { _id: 'score', name: '推荐' },
+        { _id: 'near', name: '距离' },
+        { _id: 'date', name: '最新' },
+    ];
+
     vm.query = {
         page: 0,
         limit: 10,
         label: null,
-        orderBy: 'score',
+        orderBy: vm.orderByList[0],
         order: -1,
     };
 
     vm.config = {
         watchPosition: false,
-        iconUrl: null,
         sw: null,
         ne: null,
         activeMarker: null,
@@ -55,22 +60,21 @@ function HomeController($scope, $ionicHistory, $cordovaGeolocation, $state, Rest
     initMap();
 
 
-    // $scope.$on('$ionicView.enter', function () {
-    //    if ($ionicHistory.viewHistory().backView) {
-    //        getShareListAndShowToolTop();
-    //    }
-    // });
+    $scope.$on('$ionicView.enter', function () {
+        if ($ionicHistory.viewHistory().backView) {
+            getShareListAndShowToolTop();
+        }
+    });
 
 
     // 初始化标签
     function initLabels() {
         Labels.getList().then(list => {
             vm.labelsList = [{name: '全部', _id: null}, ...list];
+            vm.query.label = vm.labelsList[0];
             vm.labelsList.forEach((value, index) => {
-                value.iconUrl = `/images/nav_${index}.png`;
+                value.iconUrl = require(`../app/images/nav_${index}.png`);
             });
-
-            vm.config.iconUrl = vm.labelsList[0].iconUrl;
         });
     }
 
@@ -88,7 +92,7 @@ function HomeController($scope, $ionicHistory, $cordovaGeolocation, $state, Rest
 
         map.addControl(top_right_navigation);
 
-        arrIcon = new BMap.Icon('./images/arraw.png', new BMap.Size(25, 27), {
+        arrIcon = new BMap.Icon(require('../app/images/arraw.png'), new BMap.Size(25, 27), {
             anchor: new BMap.Size(12, 0),
             imageSize: new BMap.Size(25, 27),
         });
@@ -98,7 +102,6 @@ function HomeController($scope, $ionicHistory, $cordovaGeolocation, $state, Rest
         map.addEventListener('dragend', dragend, false);
         map.addEventListener('zoomend', zoomend, false);
 
-
         //  获得位置坐标，添加导航图标
         GoeLoadService.retain();
         $cordovaGeolocation.getCurrentPosition({enableHighAccuracy: false})
@@ -107,7 +110,7 @@ function HomeController($scope, $ionicHistory, $cordovaGeolocation, $state, Rest
                 map.addOverlay(arrowMarker = new BMap.Marker(point, {icon: arrIcon}));
                 vm.query.center = [point.lng, point.lat].join(',');
                 map.centerAndZoom(point, 18);
-                getShareListAndShowToolTop();
+                getShareListAndShowToolTop(vm.query);
             });
     }
 
@@ -118,14 +121,14 @@ function HomeController($scope, $ionicHistory, $cordovaGeolocation, $state, Rest
 
     //  地图缩放触发事件
     function zoomend() {
-        getShareListAndShowToolTop();
+        getShareListAndShowToolTop(vm.query);
     }
 
 
     //  地图拖动触发事件
     function dragend() {
         if (!vm.config.watchPosition) {
-            getShareListAndShowToolTop();
+            getShareListAndShowToolTop(vm.query);
         }
     }
 
@@ -139,15 +142,13 @@ function HomeController($scope, $ionicHistory, $cordovaGeolocation, $state, Rest
                 map.panTo(point);
                 vm.query.center = [point.lng, point.lat].join(',');
                 arrowMarker.setPosition(point);
-                getShareList().then(list => {
-                    list.forEach(value => {
+                getShareList(vm.query).then(list => {
+                    list.forEach((value, index) => {
                         const pt = new BMap.Point(value.coordinates[0], value.coordinates[1]);
-                        addMarker(pt, value).then((marker) => {
+                        addMarker(pt, value, index, vm.query.label.iconUrl).then((marker) => { // marker为第一个标签
                             marker._div.classList.add('ani-marker-big');
                             vm.config.activeMarker = marker;
-                        }).catch((data) => {
-                            console.log(data);
-                        });
+                        }).catch(() => {});
                     });
                 });
             });
@@ -155,27 +156,23 @@ function HomeController($scope, $ionicHistory, $cordovaGeolocation, $state, Rest
 
 
     //  获得分享列表然后继续添加marker，toolTop
-    function getShareListAndShowToolTop({orderBy = vm.query.orderBy, iconUrl = vm.config.iconUrl} = {}) {
-        getShareList(orderBy, iconUrl).then(list => {
-            list.forEach(value => {
+    function getShareListAndShowToolTop(query) {
+        getShareList(query).then(list => {
+            list.forEach((value, index) => {
                 const point = new BMap.Point(value.coordinates[0], value.coordinates[1]);
-                addMarker(point, value).then((marker) => {
+                addMarker(point, value, index, query.label.iconUrl).then((marker) => { // marker为第一个标签
                     map.panTo(marker.activePoint);
                     marker.toolTop.show();
                     marker._div.classList.add('ani-marker-big');
                     vm.config.activeMarker = marker;
-                }).catch((data) => {
-                    console.log(data);
-                });
+                }).catch(() => {});
             });
         });
     }
 
 
     //  获得分享列表
-    function getShareList(orderBy = vm.query.orderBy, iconUrl = vm.config.iconUrl) {
-        vm.config.iconUrl = iconUrl;
-
+    function getShareList({orderBy, label}) {
         //  清除marker浮标 & 清除提示框
         markerList.forEach(value => {
             map.removeOverlay(value.toolTop);
@@ -193,8 +190,13 @@ function HomeController($scope, $ionicHistory, $cordovaGeolocation, $state, Rest
         return new Promise(resolve => {
             $timeout.cancel(timer);
             timer = $timeout(() => {
-                if (orderBy === 'near') {
-                    Shares.one('near').get(vm.query).then(result => {
+                const query = {
+                    ...vm.query,
+                    label: label._id,
+                    orderBy: orderBy._id,
+                };
+                if (orderBy._id === 'near') {
+                    Shares.one('near').get(query).then(result => {
                         vm.shareList = result;
                         console.log('shares count: %s', result.length);
                         $ionicSlideBoxDelegate.update();
@@ -202,9 +204,9 @@ function HomeController($scope, $ionicHistory, $cordovaGeolocation, $state, Rest
                         resolve(result);
                     });
                 } else {
-                    Shares.getList(vm.query).then(result => {
+                    Shares.getList(query).then(result => {
                         vm.shareList = result;
-                        console.log('shares count: %s', result.length);
+                        console.log('shares count: %c' + result.length, 'color: red');
                         $ionicSlideBoxDelegate.update();
                         $ionicSlideBoxDelegate.slide(0);
                         resolve(result);
@@ -216,8 +218,7 @@ function HomeController($scope, $ionicHistory, $cordovaGeolocation, $state, Rest
 
 
     //  添加marker浮标
-    function addMarker(point, share) {
-        const iconUrl = vm.config.iconUrl;
+    function addMarker(point, share, index, iconUrl) {
         let activePoint;
 
         const marker = new BMapMarker({
@@ -225,23 +226,24 @@ function HomeController($scope, $ionicHistory, $cordovaGeolocation, $state, Rest
             iconUrl: iconUrl,
         });
 
-        //  为marker绑定share信息和toolTop
-        addToolTop(marker, share);
-        map.addOverlay(marker);
 
-        activePoint = new BMap.Point(point.lng, (vm.config.ne.lat - vm.config.sw.lat) / 3 + point.lat);
-        marker.activePoint = activePoint;
+        //  为marker绑定share信息和toolTop
+        map.addOverlay(marker);
+        addToolTop(marker, share);
 
         //  点击marker浮标添加动画类
-        marker._div.addEventListener('touchstart', function () {
-            const index = markerList.findIndex(value => value === marker);
+        marker.addEventListener('touchstart', function () {
             clickMarker(index);
         }, false);
 
+        activePoint = new BMap.Point(point.lng, (vm.config.ne.lat - vm.config.sw.lat) / 5 + point.lat);
+        marker.activePoint = activePoint;
+        markerList.push(marker);
+
+
         //  return promise
         return marker.enterFinish.then(() => {
-            markerList.push(marker);
-            if (markerList.length === 1) {
+            if (index === 0) {
                 return marker;
             }
             return Promise.reject('not first marker');
@@ -258,13 +260,14 @@ function HomeController($scope, $ionicHistory, $cordovaGeolocation, $state, Rest
         marker.toolTop = toolTop;
         map.addOverlay(toolTop);
         toolTop.hide();
-        toolTop._div.addEventListener('touchstart', function () {
+
+        toolTop.click(function () {
             $state.go('share-detail', {_id: toolTop._data._id});
         });
     }
 
 
-    //  滑动栏改变事件
+    // 滑动栏改变事件
     function clickMarker(index) {
         if (!markerList.length) return;
         const marker = markerList[index];

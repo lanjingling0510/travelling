@@ -1,5 +1,5 @@
 angular.module('travelling.common.services')
-    .factory('AddImageByApp', AddImageByApp)
+    // .factory('AddImageByApp', AddImageByApp)
     .factory('UploadFile', UploadFileFactory);
 
 

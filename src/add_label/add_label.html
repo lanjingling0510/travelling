@@ -11,7 +11,7 @@
 
         <ul class="row row-wrap">
             <label-wrap class="col-25 add-label-wrap" ng-repeat="label in vm.labelsList track by label._id">
-                <label-add class="add-label-col"  bg="{{label.image}}"></label-add>
+                <label-add class="add-label-col bg-{{$index}}"></label-add>
                 <label-remove ng-show="label.selected" class="add-label-col add-label-close" ></label-remove>
                 <span class="add-label-name">{{label.name}}</span>
             </label-wrap>

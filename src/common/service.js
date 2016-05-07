@@ -6,6 +6,7 @@ angular.module('travelling.common.services', [
 require('./alert.service.js');
 require('./auth.service.js');
 //require('./dom.service.js');
+require('./geolocation.service.js');
 require('./bmapGeocoder.service.js');
 require('./bmapToolTop.service.js');
 require('./bmapMarker.service.js');

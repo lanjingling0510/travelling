@@ -96,5 +96,26 @@ function BMapToolTopService() {
         }
     };
 
+    // 点击事件
+    ToolTopOverlay.prototype.addEventListener = function (event, func) {
+        this._div.addEventListener(event, func, false);
+    };
+
+    ToolTopOverlay.prototype.click = function (func) {
+        let startTime;
+        this.addEventListener('touchstart', (e) => {
+            this._bugFlag = true;
+            startTime = e.timeStamp;
+        });
+        this.addEventListener('touchmove', () => {
+            this._bugFlag = false;
+        });
+        this.addEventListener('touchend', (e) => {
+            if (this._bugFlag && e.timeStamp - startTime < 300) {
+                func();
+            }
+        });
+    };
+
     return ToolTopOverlay;
 }

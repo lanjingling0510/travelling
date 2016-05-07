@@ -23,7 +23,7 @@
                 <img ng-src="{{image}}" alt=""/>
             </li>
             <li class="item item-avatar-left item-borderless">
-                <img src="/images/avatar.jpg" alt=""/>
+                <img src="../../app/images/avatar.jpg" alt=""/>
                 <h2> 来自 <span class="assertive"  ui-sref="user-detail({_id: vm.share.userId._id})">{{vm.share.userId.nickname}}</span></h2>
                 <p>{{vm.share.date | convertDate}}</p>
             </li>
@@ -65,7 +65,7 @@
                 <ul class="list  list-borderless">
 
                     <li class="item item-avatar-left">
-                        <img src="/images/avatar.jpg" alt=""/>
+                        <img src="../../app/images/avatar.jpg" alt=""/>
                         <h4  ui-sref="user-detail({_id: reply.userId._id})">{{reply.userId.nickname}}</h4>
                         <span class="assertive" ng-bind-html="reply.score |  convertSCore"></span>
                     </li>

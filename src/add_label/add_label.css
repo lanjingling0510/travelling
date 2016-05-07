@@ -3,7 +3,7 @@
     height: 30%;
     border-radius: 40px;
     padding: 1em;
-    background: url('/images/label-wenzi.png') 50% 100% no-repeat;
+    background: url('../app/images/label-wenzi.png') 50% 100% no-repeat;
     background-size: 70%;
 }
 
@@ -45,6 +45,21 @@
     display: inline-block;
     z-index: 1;
     background-size: 60px 60px;
+}
+.add-label-col.bg-0{
+    background-image: url('../app/images/label-view.png');
+}
+.add-label-col.bg-1{
+    background-image: url('../app/images/label-play.png');
+}
+.add-label-col.bg-2{
+    background-image: url('../app/images/label-cart.png');
+}
+.add-label-col.bg-3{
+    background-image: url('../app/images/label-room.png');
+}
+.add-label-col.bg-4{
+    background-image: url('../app/images/label-food.png');
 }
 
 .add-label-close {

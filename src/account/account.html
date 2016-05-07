@@ -9,8 +9,7 @@
         <!-- 个人信息签名-->
         <div class="list card">
             <div class="item item-avatar">
-                <img ng-src="{{vm.user.avatar}}">
-
+                <div class="user-avatar" ng-style="{'background-image': 'url(' + vm.user.avatar + ')'}"  style="left: 16px; top: 13px;position: absolute"></div>
                 <h2>{{vm.user.nickname}}</h2>
 
                 <p>游言：踏破铁鞋无觅处，得来全不费工夫。</p>

@@ -55,7 +55,7 @@ function AddPosController($scope, $ionicLoading, store, $cordovaGeolocation, BMa
 
         map.addControl(top_right_navigation);
         marker = new BMap.Marker();  // 创建标注
-        marker.setIcon(new BMap.Icon('./images/nav_0.png', new BMap.Size(20, 26), {
+        marker.setIcon(new BMap.Icon(require('../app/images/nav_0.png'), new BMap.Size(20, 26), {
             anchor: new BMap.Size(10, 13),
             imageSize: new BMap.Size(20, 26),
         }));

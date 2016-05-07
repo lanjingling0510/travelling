@@ -53,7 +53,7 @@ function labelAddDirective() {
             bg: '@',
         },
         require: '^labelWrap',
-        template: '<span ng-click="addLabel()" ng-style="{\'background-image\':\'url(\'+bg+\')\'}"></span>',
+        template: '<span ng-click="addLabel()"></span>',
         link: link,
     };
 
@@ -71,9 +71,10 @@ function labelRemoveDirective() {
         replace: true,
         scope: {},
         require: '^labelWrap',
-        template: '<span ng-click="removeLabel()">' +
-        '<img src="images/add-button.png" style="margin:25%;width:50%" alt=""/>' +
-        '</span>',
+        template:
+        `<span ng-click="removeLabel()">
+        <img src=${require('../app/images/add-button.png')} style="margin:25%;width:50%" alt=""/>
+        </span>`,
         link: link,
     };
 

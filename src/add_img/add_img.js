@@ -21,9 +21,8 @@ function ModuleConfig($stateProvider) {
 }
 
 /* @ngInject*/
-function AddImgController($rootScope, $state, AlertService, store, UploadFile, AddImageByApp, Restangular, $ionicHistory, $ionicLoading) {
+function AddImgController($rootScope, $state, AlertService, store, UploadFile, Restangular, $ionicHistory, $ionicLoading) {
     const vm = this;
-    vm.addImageByApp = addImageByApp;
     vm.addImageByWeb = addImageByWeb;
     vm.removeImage = removeImage;
     vm.submitShare = submitShare;
@@ -32,10 +31,6 @@ function AddImgController($rootScope, $state, AlertService, store, UploadFile, A
     const Share = Restangular.all('share');
 
     initController();
-
-    function addImageByApp() {
-        AddImageByApp();// eslint-disable-line new-cap
-    }
 
 
     function addImageByWeb(file) {
@@ -92,7 +87,7 @@ function AddImgController($rootScope, $state, AlertService, store, UploadFile, A
 
     function clearShare() {
         vm.images = [];
-        $state.go('tab.add-label');
+        $state.go('tab.home');
     }
 
 

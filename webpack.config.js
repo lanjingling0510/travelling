@@ -4,6 +4,8 @@ const webpack = require('webpack');
 const autoprefixer = require('autoprefixer');
 const merge = require('webpack-merge');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+
 
 const TARGET = process.env.npm_lifecycle_event;
 const ROOT_PATH = path.resolve(__dirname);
@@ -13,7 +15,7 @@ const BUILD_PATH = path.resolve(ROOT_PATH, 'www');
 /* eslint-enable */
 const common = {
     entry: {
-        app: [path.join(APP_PATH, './app/app.js')],
+        index: path.join(APP_PATH, './app/app.js'),
         vendor: [
             'angular',
             'angular-ui-router',
@@ -26,7 +28,8 @@ const common = {
     },
     output: {
         path: BUILD_PATH,
-        filename: 'bundle.js',
+        filename: '[name].bundle.js',
+        chunkFilename: '[name].chunk.js',
     },
     module: {
         loaders: [
@@ -37,11 +40,18 @@ const common = {
             {test: /\.(ttf|eot|svg|otf)(\?v=\d(\.\d){2})?$/, loader: 'file'},
             {test: /\.woff(2)?(\?v=\d(\.\d){2})?$/, loader: 'url?limit=10000&minetype=application/font-woff'},
         ],
+        noParse: [/ionic\.min\.js/, /ionic\-angular\.min\.js/],
     },
     postcss: [autoprefixer],
     plugins: [
         new webpack.ProvidePlugin({
             _: 'lodash',
+        }),
+        new HtmlWebpackPlugin({
+            filename: 'index.html',
+            template: './src/index.html',
+            chunks: ['vendor', 'index'],
+            hash: true,
         }),
         new webpack.optimize.CommonsChunkPlugin('vendor', 'vendor.bundle.js'),
     ],
@@ -55,9 +65,8 @@ if (TARGET === 'start') {
             hot: true,
             inline: true,
             progress: true,
-            contentBase: 'www',
             port: 8080,
-            host: 'localhost',
+            // host: '192.168.61.226',
             // proxy: {
             //     '/apis/**': {
             //         target: 'http://www.cyt-rain.cn:3001',

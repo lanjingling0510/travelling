@@ -1,16 +1,15 @@
 <ion-popover-view class="account-card">
     <ion-content class="padding text-center">
 
-        <div class="account-card-avatar">
-            <img ng-src="{{vm.user.avatar}}">
+        <div class="account-card-avatar" ng-style="{'background-image': 'url(' + vm.user.avatar + ')'}" >
         </div>
 
-        <a class="account-card-nickname button button-clear" ui-sref="user-edit" ng-click="vm.closePopover()">
-            {{vm.user.nickname}}
+        <a class="assertive" ui-sref="user-edit" ng-click="vm.closePopover()">
+            修改个人信息
         </a>
-
-                <br>
-        <a ng-click="vm.logOut()" class="positive">注销</a>
+        <br>
+        <br>
+        <a ng-click="vm.logOut()" class="assertive">退出</a>
 
     </ion-content>
 </ion-popover-view>

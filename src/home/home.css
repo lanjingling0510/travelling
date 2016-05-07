@@ -5,11 +5,8 @@
     left: 18px;
     width: 39px;
     height: 39px;
-    background: rgba(0, 0, 0, 0.3) url('/images/position.png') no-repeat;
+    background: rgba(0, 0, 0, 0.3) url('../app/images/position.png') no-repeat;
     background-size: 39px 39px;
     border-radius: 5px;
     z-index: 999;
 }
-
-
-

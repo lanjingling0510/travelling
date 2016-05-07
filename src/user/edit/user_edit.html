@@ -9,7 +9,7 @@
     <!-- 页面内容-->
     <ion-content>
         <ul class="list">
-            <li class="item item-avatar-right item-icon-right"
+            <li class="item item-icon-right"
                 ngf-select ng-model="vm.pictureFile"
                 name="file"
                 ngf-change="vm.editAvatar($file)"
@@ -18,9 +18,8 @@
                 ngf-resize="{width: 100, height: 100}"
                 accept="image/*"
                 ngf-max-size="3MB">
-                <img ng-src="{{vm.user.avatar}}" style="right: 42px;">
+                <div class="user-avatar" ng-style="{'background-image': 'url(' + vm.user.avatar + ')'}"  style="right: 42px; top: 5px;position: absolute"></div>
                 <i class="icon ion-ios-arrow-right text-gray"></i>
-
                 头像
             </li>
             <li class="item">

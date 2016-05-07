@@ -9,14 +9,16 @@
     text-decoration: none;
 }
 
-.account-card-avatar img {
+.account-card-avatar {
     width: 100px;
     height: 100px;
     border-radius: 50%;
-    margin-bottom: 2rem;
+    margin: 0 auto 2rem auto;
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-size: cover;
 }
 
 .account-card-nickname {
-    font-size: 20px;
-    color: #ff2f28 !important;
+
 }

@@ -1,4 +1,4 @@
-<ion-view view-title="导航">
+<ion-view view-title="周边分享">
 
     <ion-nav-buttons side="right">
         <button  class="button button-icon icon ion-android-person-add" ui-sref="user-search"></button>
@@ -6,14 +6,12 @@
 
 
     <drop-down>
-        <sub-drop-down  title="分类">
-            <ion-radio ng-repeat="label in vm.labelsList" name="label" ng-model="vm.query.label" ng-value="label._id" ng-change="vm.getShareListAndShowToolTop({iconUrl: label.iconUrl})">{{label.name}}</ion-radio>
+        <sub-drop-down  title="{{vm.query.label.name}}">
+            <ion-radio ng-repeat="label in vm.labelsList" name="label" ng-model="vm.query.label" ng-value="label" ng-change="vm.getShareListAndShowToolTop(vm.query)">{{label.name}}</ion-radio>
         </sub-drop-down>
 
-        <sub-drop-down title="排序">
-            <ion-radio name="order" ng-model="vm.query.orderBy" ng-value="'score'" ng-change="vm.getShareListAndShowToolTop()">推荐</ion-radio>
-            <ion-radio name="order" ng-model="vm.query.orderBy" ng-value="'near'" ng-change="vm.getShareListAndShowToolTop()">距离</ion-radio>
-            <ion-radio name="order" ng-model="vm.query.orderBy" ng-value="'date'" ng-change="vm.getShareListAndShowToolTop()">最新</ion-radio>
+        <sub-drop-down title="{{vm.query.orderBy.name}}">
+            <ion-radio ng-repeat="order in vm.orderByList" name="order" ng-model="vm.query.orderBy" ng-value="order" ng-change="vm.getShareListAndShowToolTop(vm.query)">{{order.name}}</ion-radio>
         </sub-drop-down>
 
         <sub-drop-down title="选项">

@@ -30,16 +30,12 @@ function ModuleConfig($stateProvider) {
 function AddLabelController($scope, store, $state, Restangular) {
     const vm = this;
     const Labels = Restangular.all('label');
-    // With the new view caching in Ionic, Controllers are only called
-    // when they are recreated or on app start, instead of every page change.
-    // To listen for when this page is active (for example, to refresh data),
-    // listen for the $ionicView.enter event:
-    //
+
+    vm.nextPage = nextPage;
+
     $scope.$on('$ionicView.enter', function () {
         initController();
     });
-
-    vm.nextPage = nextPage;
 
 
     function nextPage() {
@@ -49,7 +45,15 @@ function AddLabelController($scope, store, $state, Restangular) {
 
 
     function initController() {
-        vm.labelsList = Labels.getList().$object;
+        Labels.getList().then(data => {
+            vm.labelsList = data;
+            vm.labelsList.map((label) => {
+                return {
+                    ...label,
+                    selected: false,
+                };
+            });
+        });
 
         store.remove('share.city');
         store.remove('share.labels');

@@ -21,7 +21,7 @@
     top: -7px;
     width:30px;
     height:30px;
-    background:url('/images/close.png');
+    background:url('../app/images/close.png');
     background-size:30px 30px;
     z-index: 1;
 }

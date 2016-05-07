@@ -1,3 +1,5 @@
+const debug = require('../app/util/debug.js');
+
 module.exports = angular.module('travelling.common.services')
     .config(['$httpProvider', moduleConfig])
     .factory('BearerInterceptor', BearerInterceptor)
@@ -13,6 +15,7 @@ function moduleConfig($httpProvider) {
 function BearerInterceptor($rootScope, $q, $injector) {
     return {
         request: function (conf) {
+            debug.ajax(conf.url);
             conf.headers = conf.headers || {};
             if (!!$rootScope.auth && !!$rootScope.auth.accessToken) {
                 conf.headers.Authorization = 'Bearer ' + $rootScope.auth.accessToken;

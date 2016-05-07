@@ -60,6 +60,27 @@ function BMapMarkerService($animate) {
         getPosition() {
             return this._center;
         }
+
+        // 点击事件
+        addEventListener(event, func) {
+            this._div.addEventListener(event, func);
+        }
+
+        click(func) {
+            let startTime;
+            this.addEventListener('touchstart', (e) => {
+                this._bugFlag = true;
+                startTime = e.timeStamp;
+            });
+            this.addEventListener('touchmove', () => {
+                this._bugFlag = false;
+            });
+            this.addEventListener('touchend', (e) => {
+                if (this._bugFlag && e.timeStamp - startTime < 300) {
+                    func();
+                }
+            });
+        }
     }
 
     return MarkerOverlay;
